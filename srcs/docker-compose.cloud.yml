@@ -1,3 +1,5 @@
+name: typerun
+
 services:
   nginx:
     environment:
