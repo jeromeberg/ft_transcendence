@@ -6,9 +6,9 @@
     "build": "nest build",
     "start:prod": "node dist/src/main",
     "start:dev": "nest start --watch",
-    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
-    "seedv2": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seedv2.ts",
-    "seedstress": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seedstress.ts"
+    "seed": "npm run quotes && ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
+    "quotes": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/quotes.ts",
+    "stress": "npm run quotes && ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/stress.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.24",

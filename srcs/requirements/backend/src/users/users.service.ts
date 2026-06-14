@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, NotFoundException, UnauthorizedException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { UpdateProfileDto, UpdateSettingsDto } from './dto'
 import { AchievementService } from '../achievement/achievement.service';
@@ -32,13 +32,21 @@ export class UsersService {
       throw new ConflictException('USER_ALREADY_EXISTS');
 
     const passwordHash = await this.HashThePass(password);
-    return this.prisma.user.create({
-      data: { username, email, passwordHash },
-      select: {
-        id: true, username: true, email: true,
-        avatarUrl: true, bio: true, language: true,
-        status: true, createdAt: true, updatedAt: true,
-      },
+    return this.prisma.$transaction(async (tx) => {
+      const usersCount = await tx.user.count();
+      return tx.user.create({
+        data: {
+          username,
+          email,
+          passwordHash,
+          role: usersCount === 0 ? Role.MOD : Role.USER,
+        },
+        select: {
+          id: true, username: true, email: true,
+          avatarUrl: true, bio: true, language: true,
+          status: true, createdAt: true, updatedAt: true,
+        },
+      });
     });
   }
 
@@ -58,6 +66,7 @@ export class UsersService {
       where: { id },
       select: {
         id: true, username: true, email: true,
+        role: true,
         avatarUrl: true, bio: true, language: true,
         status: true, createdAt: true, updatedAt: true,
         passwordHash: true,
@@ -90,6 +99,7 @@ export class UsersService {
       where: { email },
       select: {
         id: true, username: true, email: true,
+        role: true,
         passwordHash: true, avatarUrl: true, bio: true,
         language: true, status: true, createdAt: true, updatedAt: true,
       },
@@ -101,6 +111,7 @@ export class UsersService {
       where: { username },
       select: {
         id: true, username: true, email: true,
+        role: true,
         passwordHash: true, avatarUrl: true, bio: true, language: true,
         status: true, createdAt: true, updatedAt: true,
       },
@@ -176,7 +187,14 @@ export class UsersService {
         wpm: true, position: true, accuracy: true, finishedAt: true, nbPlayers: true, nbBots: true,
         match: {
           select: {
-            id: true, startedAt: true, textSnippet: true,
+            id: true,
+            startedAt: true,
+            quote: {
+              select: {
+                id: true,
+                text: true,
+              },
+            },
             matchResult: {
               select: {
                 position: true,

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/features/auth/useAuth";
 import { LanguageSwitcher } from "@/components";
 import { ChatNotif } from "@/features/chat";
+import { useIsMod } from "@/features/auth";
 
 const NAV_LINKS = [
   { key: "play",        href: "/play" },
@@ -40,7 +41,7 @@ function NavLink({ href, label, pathname }: { href: string; label: string; pathn
 
 // == USERMENU ==
 
-function UserMenu({ username, onLogout }: { username: string; onLogout: () => void }) {
+function UserMenu({ username, onLogout, isMod }: { username: string; onLogout: () => void; isMod: boolean }) {
   const { t } = useTranslation('nav');
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -73,6 +74,7 @@ function UserMenu({ username, onLogout }: { username: string; onLogout: () => vo
           <li><Link to="/friends"          onClick={() => setIsOpen(false)} className={itemClass}>{t('friends')}</Link></li>
           <li><Link to="/friends/requests" onClick={() => setIsOpen(false)} className={itemClass}>{t('requests')}</Link></li>
           <li><Link to="/settings"         onClick={() => setIsOpen(false)} className={itemClass}>{t('settings')}</Link></li>
+          {isMod? <li><Link to="/admin" onClick={() => setIsOpen(false)} className={itemClass}>Admin</Link></li> : null }
           <li>
             <button
               type="button"
@@ -89,10 +91,11 @@ function UserMenu({ username, onLogout }: { username: string; onLogout: () => vo
 
 // == MOBILEMENU ==
 
-function MobileMenu({ pathname, user, onLogout }: {
+function MobileMenu({ pathname, user, onLogout, isMod }: {
   pathname: string;
   user: { username: string } | null;
   onLogout: () => void;
+  isMod: boolean;
 }) {
   const { t } = useTranslation('nav');
   const linkClass = "block w-full px-3 py-2 text-xs uppercase tracking-widest transition-colors duration-100";
@@ -121,6 +124,7 @@ function MobileMenu({ pathname, user, onLogout }: {
             <Link to="/friends"          className={`${linkClass} text-dim hover:text-default hover:bg-muted`}>{t('friends')}</Link>
             <Link to="/friends/requests" className={`${linkClass} text-dim hover:text-default hover:bg-muted`}>{t('requests')}</Link>
             <Link to="/settings"         className={`${linkClass} text-dim hover:text-default hover:bg-muted`}>{t('settings')}</Link>
+            {isMod? <Link to="/admin" className={`${linkClass} text-dim hover:text-default hover:bg-muted`}>Admin</Link> : null }
             <button type="button" onClick={onLogout} className={`text-left ${linkClass} text-danger hover:text-black hover:bg-danger`}>
               {t('logout')}
             </button>
@@ -140,6 +144,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const { user, logout } = useAuth();
+  const isMod = useIsMod();
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
@@ -174,7 +179,7 @@ export default function Navbar() {
           {user? ( <ChatNotif/> ) : null}
           <LanguageSwitcher />
           {user ? (
-            <UserMenu username={user.username} onLogout={logout} />
+            <UserMenu username={user.username} onLogout={logout} isMod={isMod}/>
           ) : (
             <Link to="/signin"
               className="px-3 py-1 text-xs uppercase tracking-widest text-dim hover:text-default hover:bg-muted transition-colors duration-100">
@@ -185,7 +190,7 @@ export default function Navbar() {
 
       </div>
 
-      {menuOpen && <MobileMenu pathname={pathname} user={user} onLogout={logout} />}
+      {menuOpen && <MobileMenu pathname={pathname} user={user} onLogout={logout} isMod={isMod}/>}
     </nav>
   );
 }

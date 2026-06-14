@@ -67,11 +67,11 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @UseGuards(WsJwtGuard)
   @SubscribeMessage('join_queue')
-  handleJoinQueue(client: Socket) {
+  async handleJoinQueue(client: Socket) {
 	const input = this.resolveJoin(client);
 	if (!input)
 		return;
-	const result = this.gameService.assign(input);
+	const result = await this.gameService.assign(input);
 	if (result.status === 'joined')
 		client.join(result.room.id);
 	else if (result.status === 'duplicate_session')

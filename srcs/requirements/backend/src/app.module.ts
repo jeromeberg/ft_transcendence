@@ -12,6 +12,7 @@ import { FriendsModule } from './friends/friends.module';
 import { StatusModule } from './status/status.module';
 import { ChatModule } from './chat/chat.module';
 import { AchievementModule } from './achievement/achievement.module';
+import { QuoteModule } from './quote/quote.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { AchievementModule } from './achievement/achievement.module';
     FriendsModule,
     StatusModule,
     ChatModule,
-    AchievementModule
+    AchievementModule,
+    QuoteModule
   ],
   controllers: [AsyncApiController],
   providers: [

@@ -13,8 +13,6 @@ const PHRASES = [
   'je suis chaud', 'trop fort', 'la prochaine fois c\'est moi',
 ];
 
-const TEXT_SNIPPET = 'size_t ft_strlen(const char *s) returns the number of characters before the null terminator.';
-
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -57,6 +55,16 @@ async function main() {
   const sender  = users[CORE_COUNT];
   const receiver = users[CORE_COUNT + 1];
 
+  const seededQuotes = await prisma.quote.findMany({
+    where: { active: true },
+    select: { id: true },
+  });
+  const quoteIds = seededQuotes.map((q) => q.id);
+
+  if (quoteIds.length === 0) {
+    throw new Error('No quotes available. Run `npm run quotes` first.');
+  }
+
   const friendships: { initiatorId: number; receiverId: number; status: FriendshipStatus }[] = [];
 
   for (let i = 0; i < core.length; i++) {
@@ -81,7 +89,7 @@ async function main() {
     const players    = [...core].sort(() => Math.random() - 0.5).slice(0, playerCount);
 
     const match = await prisma.match.create({
-      data: { textSnippet: TEXT_SNIPPET, startedAt, endedAt, status: MatchStatus.FINISHED },
+      data: { quoteId: pick(quoteIds), startedAt, endedAt, status: MatchStatus.FINISHED },
     });
 
     const results = players

@@ -128,7 +128,7 @@ export class UsersController {
     @ApiOperation({ summary: 'Get match history' })
     @ApiQuery({ name: 'page', required: false, example: 1 })
     @ApiQuery({ name: 'limit', required: false, example: 20 })
-    @ApiResponse({ status: 200, schema: { example: { data: [{ wpm: 85, position: 1, accuracy: 96.5, nbPlayers: 3, nbBots: 1, finishedAt: '2026-01-01T00:00:00.000Z', match: { id: 1, startedAt: '2026-01-01T00:00:00.000Z', textSnippet: 'The quick brown fox', matchResult: [{ position: 1, wpm: 85, kind: 'user', displayName: 'johndoe', avatarUrl: null, user: { id: 1, username: 'johndoe', avatarUrl: null } }, { position: 2, wpm: 60, kind: 'bot', displayName: 'Bot 3', avatarUrl: null, user: null }] } }], total: 1, totalPages: 1 } } })
+    @ApiResponse({ status: 200, schema: { example: { data: [{ wpm: 85, position: 1, accuracy: 96.5, nbPlayers: 3, nbBots: 1, finishedAt: '2026-01-01T00:00:00.000Z', match: { id: 1, startedAt: '2026-01-01T00:00:00.000Z', quote: { id: 10, text: 'The quick brown fox' }, matchResult: [{ position: 1, wpm: 85, kind: 'user', displayName: 'johndoe', avatarUrl: null, user: { id: 1, username: 'johndoe', avatarUrl: null } }, { position: 2, wpm: 60, kind: 'bot', displayName: 'Bot 3', avatarUrl: null, user: null }] } }], total: 1, totalPages: 1 } } })
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @Get(':username/history')
     getHistory(

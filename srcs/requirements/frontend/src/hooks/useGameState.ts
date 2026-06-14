@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { QUOTES } from "@backend/common/game.constant";
+import { getRandomQuote } from "@/api/quote.api";
 
-function pickRandomQuote(): string {
-  return QUOTES[Math.floor(Math.random() * QUOTES.length)];
-}
+const FALLBACK_QUOTE = "I didn't tell Mama anything. I was just about to come up and wake you so that I could tell you.";
 
 function correctPrefixLength(typed: string, word: string): number {
   let i = 0;
@@ -16,7 +14,7 @@ function calcMaxTime(passageLength: number): number {
 }
 
 export function useGameState(active: boolean, forcedEnd = false, practice = false, initialText?: string, maxTimeOverride?: number) {
-  const [passage] = useState<string>(() => initialText ?? pickRandomQuote());
+  const [passage, setPassage] = useState<string>(() => initialText ?? FALLBACK_QUOTE);
   const words = passage.split(" ");
   const maxTime = maxTimeOverride ?? calcMaxTime(passage.length);
 
@@ -28,6 +26,7 @@ export function useGameState(active: boolean, forcedEnd = false, practice = fals
   const [lockedWpm, setLockedWpm] = useState<number | null>(null);
   const [lockedElapsed, setLockedElapsed] = useState<number | null>(null);
   const startedAt = useRef<number | null>(null);
+  const hasProgressRef = useRef(false);
 
   const currentWord = words[wordIndex] ?? "";
   const correctInCurrent = correctPrefixLength(typed, currentWord);
@@ -59,6 +58,38 @@ export function useGameState(active: boolean, forcedEnd = false, practice = fals
     setTyped("");
     if (!isLast) setTotalTyped((t: number) => t + 1);
   };
+
+  useEffect(() => {
+    if (typed.length > 0 || wordIndex > 0 || completedChars > 0 || totalTyped > 0 || elapsed > 0) {
+      hasProgressRef.current = true;
+    }
+  }, [typed, wordIndex, completedChars, totalTyped, elapsed]);
+
+  useEffect(() => {
+    if (initialText) {
+      setPassage(initialText);
+      return;
+    }
+    if (!practice) {
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const quote = await getRandomQuote();
+        if (!cancelled && !hasProgressRef.current && quote.text) {
+          setPassage(quote.text);
+        }
+      } catch {
+        // fallback
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [practice, initialText]);
 
   useEffect(() => {
     if (playerDone && lockedWpm === null) {

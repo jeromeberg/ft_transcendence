@@ -88,3 +88,18 @@ export interface UserSearchDto {
     avatarUrl: string | null;
     status: string;
 }
+
+export type QuoteCreator = {
+  id: number;
+  username: string;
+  avatarUrl: string | null;
+};
+
+export type Quote = {
+  id: number;
+  text: string;
+  type: string | null;
+  active: boolean;
+  createdAt: string;
+  creator: QuoteCreator | null;
+};

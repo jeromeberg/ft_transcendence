@@ -6,6 +6,7 @@ export const API_AUTH_ME = '/api/auth/me';
 export const API_USERS = '/api/users';
 export const API_FRIENDS = '/api/friends';
 export const API_LEADERBOARD = '/api/leaderboard';
+export const API_QUOTES = '/api/quotes';
 
 
 export function authHeaders(token? : string | null): HeadersInit {

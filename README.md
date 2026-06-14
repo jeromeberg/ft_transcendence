@@ -2,19 +2,20 @@
 
 # Typerun
 
+![42](https://img.shields.io/badge/42-000000?style=for-the-badge&logo=42&logoColor=white)
+![Grade: 125%](https://img.shields.io/badge/Grade-125%25-brightgreen?style=for-the-badge)
+
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat&logo=nestjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+
 ## Description
 
-Multiplayer real-time typing game built for the 42 group project ft_transcendence: full-stack web application using React, NestJS, PostgreSQL, Tailwind CSS, and Docker.
-
-## Team Information
-
-| Member | Role | Responsibilities |
-|--------|------|-----------------|
-| akdovlet | Full-stack developer | UI/UX designer, Game Designer |
-| axbaudri | Developer | Settings page (profile form with email & password change, API integration), privacy & terms page content, footer, and UX testing |
-| jbergero | Full-stack developer, Product Owner (PO) | Establish priorities, validate work and features ; focus on frontend developement: build reusable components for the team, implement auth and features on the frontend |
-| kpires | Full-stack developer, Technical Lead / Architect | Backend architecture and security, authentication systems (JWT, OAuth 42), WebSocket infrastructure, shell deployment scripts, and internationalization |
-| trolland | Full-stack developer, Project Manager (PM) | Project coordination, DevOps (Docker dev/prod, deployment scripts, Cloudflare Tunnel), database seed, leaderboard with paginated search |
+Multiplayer real-time typing game built for the 42 group project ft_transcendence: full-stack web application using React, NestJS, WebSockets, PostgreSQL, Tailwind CSS, and Docker.
 
 ## Features
 
@@ -26,6 +27,13 @@ Multiplayer real-time typing game built for the 42 group project ft_transcendenc
 * **Settings**: change password, email, and default language *(axbaudri)*
 * **Status**: real-time status for users *(jbergero, kpires)*
 * **Internationalization**: full English, French and Spanish translation using i18n *(kpires)*
+* **Admin page**: user roles and basic administration page to manage quotes *(jbergero)*
+
+## Screenshots
+
+<img src="./assets/game.png" width="500px">
+
+<img src="./assets/profile.png" width="500px">
 
 ## Technical Stack
 
@@ -87,8 +95,9 @@ The URL is set via `CLOUDFLARE_DOMAIN` in `srcs/.env`. Go to `https://$CLOUDFLAR
 | make re                | Rebuild in production mode             |
 | make re-dev            | Rebuild in development mode            |
 | make re-invade-the-web | Rebuild in cloud mode                  |
+| make quotes            | Add default quotes                     |
 | make seed              | Seed the database with sample data     |
-| make seedstress        | Seed with a large data sample          |
+| make stress            | Seed with a large data sample          |
 | make seedclean         | Remove seed data                       |
 | make clean             | Clean build artifacts                  |
 | make fclean            | Full clean                             |
@@ -162,6 +171,16 @@ The URL is set via `CLOUDFLARE_DOMAIN` in `srcs/.env`. Go to `https://$CLOUDFLAR
 
 **TOTAL: 23 points**
 
+## Team Information
+
+| Member | Role | Responsibilities |
+|--------|------|-----------------|
+| akdovlet | Full-stack developer | UI/UX designer, Game Designer |
+| axbaudri | Developer | Settings page (profile form with email & password change, API integration), privacy & terms page content, footer, and UX testing |
+| jbergero | Full-stack developer, Product Owner (PO) | Establish priorities, validate work and features ; focus on frontend developement: build reusable components for the team, implement auth and features on the frontend |
+| kpires | Full-stack developer, Technical Lead / Architect | Backend architecture and security, authentication systems (JWT, OAuth 42), WebSocket infrastructure, shell deployment scripts, and internationalization |
+| trolland | Full-stack developer, Project Manager (PM) | Project coordination, DevOps (Docker dev/prod, deployment scripts, Cloudflare Tunnel), database seed, leaderboard with paginated search |
+
 ## Project Management
 
 The team worked remotely with weekly to bi-weekly calls, daily communication on Discord and used multiple tools to organize and distribute work.
@@ -203,11 +222,12 @@ The team worked remotely with weekly to bi-weekly calls, daily communication on 
 * Auth: implement auth (context, forms, hook, api calls) on the frontend
 * Profile, friends system: implement both features on the frontend (API calls, pages, components...)
 * Achievements: frontend implementation, backend fixes
+* Implement user roles and quotes system in backend and frontend
 * Status system: WebSocket frontend, backend fixes, context and hook
 * Chat: WebSocket frontend implementation, UI/UX, basic notification system for new messages using WebSocket
 * Github: CI actions setup, PR reviews, merges, conflict resolution
 * Internationalization (i18n): create and edit some translation keys
-* Database: made 2 migrations and small schema edits
+* Database: made migrations and schema edits
 * Various backend fixes and small features
 * Wrote meeting summaries after each team call
 
@@ -268,7 +288,7 @@ The team worked remotely with weekly to bi-weekly calls, daily communication on 
 
 ## Database Schema
 
-**PK**: Primary Key – **FK**: Foreign Key – **Cascade delete**: record is automatically deleted when the referenced record is deleted.
+**PK**: Primary Key – **FK**: Foreign Key – **Cascade delete**: record is automatically deleted when the referenced record is deleted — **?**: Optional
 
 ### User
 
@@ -280,6 +300,7 @@ The team worked remotely with weekly to bi-weekly calls, daily communication on 
 | passwordHash          | String?                         |
 | avatarUrl             | String?                         |
 | bio                   | String?                         |
+| role                  | Enum (USER, MOD)                |
 | language              | Enum (EN, FR, ES)               |
 | status                | Enum (ONLINE, IN_GAME, OFFLINE) |
 | createdAt / updatedAt | DateTime                        |
@@ -337,7 +358,7 @@ The team worked remotely with weekly to bi-weekly calls, daily communication on 
 | **Field**   | **Type**                                         |
 |-------------|--------------------------------------------------|
 | id          | Integer PK                                       |
-| textSnippet | String                                           |
+| quoteId     | FK → Quote                                       |
 | startedAt   | DateTime                                         |
 | endedAt     | DateTime?                                        |
 | status      | Enum (WAITING, IN_PROGRESS, FINISHED, CANCELLED) |
@@ -355,3 +376,14 @@ The team worked remotely with weekly to bi-weekly calls, daily communication on 
 | nbBots     | Int?                        |
 | position   | Int?                        |
 | finishedAt | DateTime?                   |
+
+### Quote
+
+| **Field**  | **Type**    |
+|------------|-------------|
+| id         | Integer PK  |
+| active     | Boolean     |
+| text       | String      |
+| creatorId  | FK → User?  |
+| type       | String?     |
+| createdAt  | DateTime?   |

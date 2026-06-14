@@ -45,12 +45,18 @@ enum OauthProviders {
     GITHUB
 }
 
+enum Role {
+    USER
+    MOD
+}
+
 //models
 
 model User {
     id                  Int                 @id @default(autoincrement())
     username            String              @unique
     email               String              @unique
+    role                Role                @default(USER)
     passwordHash        String?
     avatarUrl           String?
     bio                 String?
@@ -65,6 +71,7 @@ model User {
     receivedMessages    Message[]           @relation("MessageReceiver")
     matchResult         MatchResult[]
     userAchievement     UserAchievement[]
+    createdQuotes       Quote[]
 }
 
 model OAuthAccount {
@@ -101,7 +108,8 @@ model Message {
 
 model Match {
     id                  Int                 @id @default(autoincrement())
-    textSnippet         String
+    quoteId             Int
+    quote               Quote               @relation(fields: [quoteId], references: [id], onDelete: Restrict)
     startedAt           DateTime            @default(now())
     endedAt             DateTime?
     status              MatchStatus         @default(WAITING)
@@ -146,4 +154,15 @@ model UserAchievement {
     achievement         Achievement         @relation(fields:[achievementId], references: [id], onDelete: Cascade)
     unlockedAt          DateTime            @default(now())
     @@unique([userId, achievementId])
+}
+
+model Quote {
+    id                  Int                 @id @default(autoincrement())
+    active              Boolean
+    text                String
+    creatorId           Int?
+    creator             User?               @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+    type                String?
+    createdAt           DateTime?           @default(now())
+    matches             Match[]
 }

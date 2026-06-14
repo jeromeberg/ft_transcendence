@@ -13,10 +13,11 @@ import {
   Signin,
   Terms,
   Home,
-  Game
+  Game,
+  Admin
 } from "@/pages";
 import { Navbar, Footer } from "@/components";
-import { ProtectedRoute, GuestRoute } from "@/features/auth";
+import { ProtectedRoute, GuestRoute, AdminRoute } from "@/features/auth";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/friends" element={<ProtectedRoute><FriendsPage /></ProtectedRoute>} />
           <Route path="/friends/requests" element={<ProtectedRoute><FriendRequests /></ProtectedRoute>} />
+          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>

@@ -10,15 +10,6 @@ const DEFAULT_PASSWORD = 'Password123!';
 
 const prisma = new PrismaClient();
 
-const textSnippets = [
-  'size_t ft_strlen(const char *s) returns the number of characters before the null terminator.',
-  'char *ft_strdup(const char *s1) allocates a new string and copies the full source buffer into it.',
-  'void *ft_memset(void *b, int c, size_t len) fills the memory area with the same byte value.',
-  'void *ft_memcpy(void *dest, const void *src, size_t n) copies n bytes from src to dest without overlap checks.',
-  'int ft_strncmp(const char *s1, const char *s2, size_t n) compares two strings up to the requested length.',
-  'char *ft_strjoin(const char *s1, const char *s2) allocates a fresh string containing both inputs end to end.',
-];
-
 function randFrom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -61,6 +52,7 @@ async function main() {
         create: {
           username:     u.username,
           email:        u.email,
+          role:         "MOD",
           bio:          faker.lorem.sentence(),
           passwordHash,
           avatarUrl:    `https://api.dicebear.com/7.x/pixel-art/svg?seed=default${i + 1}`,
@@ -100,6 +92,16 @@ async function main() {
 
   const users = [...defaultUsers, ...randomUsers];
 
+  const seededQuotes = await prisma.quote.findMany({
+    where: { active: true },
+    select: { id: true },
+  });
+  const quoteIds = seededQuotes.map((q) => q.id);
+
+  if (quoteIds.length === 0) {
+    throw new Error('No quotes available. Run `npm run quotes` first.');
+  }
+
   const friendshipPairs = new Set<string>();
   let attempts = 0;
   while (friendshipPairs.size < SEED_FRIENDSHIPS && attempts < SEED_FRIENDSHIPS * 5) {
@@ -128,7 +130,7 @@ async function main() {
 
     const match = await prisma.match.create({
       data: {
-        textSnippet: randFrom(textSnippets),
+        quoteId: randFrom(quoteIds),
         startedAt,
         endedAt,
         status: MatchStatus.FINISHED,

@@ -5,7 +5,6 @@ import { MatchStatus, UserStatus } from '@prisma/client';
 import {
 	MAX_PLAYERS,
 	MAX_WPM,
-	QUOTES,
 	MIN_RACE_SECONDS,
 	MIN_CHARS_PER_SEC,
 	LOBBY_WAIT_MS,
@@ -16,6 +15,7 @@ import {
 	PROGRESS_MIN_INTERVAL_MS,
 } from '../common/game.constant';
 import { AchievementService } from '../achievement/achievement.service';
+import { QuoteService } from '../quote/quote.service';
 import { BotService } from './bot.service';
 import {
 	Participant,
@@ -42,15 +42,12 @@ function generateRoomID(): string {
 	return Math.random().toString(36).substring(2, 7).toUpperCase();
 }
 
-function pickQuote(): string {
-	return QUOTES[Math.floor(Math.random() * QUOTES.length)];
-}
-
 @Injectable()
 export class GameService {
 	constructor(
 		private prisma: PrismaService,
 		private achievementService: AchievementService,
+		private quoteService: QuoteService,
 		private botService: BotService,
 	) {}
 
@@ -112,7 +109,7 @@ export class GameService {
 		return `b${++this.botSeq}`;
 	}
 
-	assign(input: JoinInput): AssignResult {
+	async assign(input: JoinInput): Promise<AssignResult> {
 		if (this.isInRoom(input.socketId)) return { status: 'busy' };
 		if (input.kind === 'user' && input.userId != null && this.userInRoom(input.userId))
 			return { status: 'duplicate_session' };
@@ -134,7 +131,7 @@ export class GameService {
 
 		const existing = this.findJoinableRoom();
 		if (!existing) {
-			const room = this.createRoom(participant);
+			const room = await this.createRoom(participant);
 			this.emitLobbyUpdate(room);
 			return { status: 'joined', room };
 		}
@@ -165,12 +162,13 @@ export class GameService {
 		return eligible[0];
 	}
 
-	private createRoom(host: Participant): RoomState {
+	private async createRoom(host: Participant): Promise<RoomState> {
+		const quote = await this.quoteService.getRandomQuote();
 		const room: RoomState = {
 			id: generateRoomID(),
 			matchId: 0,
 			phase: 'waiting',
-			text: pickQuote(),
+			text: quote.text,
 			players: new Map([[host.pid, host]]),
 			hostPid: host.pid,
 			playerCount: 0,
@@ -316,7 +314,12 @@ export class GameService {
 		try {
 			const match = await this.prisma.match.create({
 				data: {
-					textSnippet: room.text,
+					quote: {
+						create: {
+							active: true,
+							text: room.text,
+						},
+					},
 					startedAt: new Date(),
 					status: MatchStatus.IN_PROGRESS,
 				},
@@ -599,7 +602,7 @@ export class GameService {
 						where: { matchId: room.matchId },
 						select: { userId: true },
 					});
-					const savedIds = new Set(saved.map((r) => r.userId));
+					const savedIds = new Set(saved.map((r: { userId: number | null }) => r.userId));
 					for (const { p, position } of finishers) {
 						if (!savedIds.has(p.userId as number)) {
 							await this.completePlayer(room, p, position);
