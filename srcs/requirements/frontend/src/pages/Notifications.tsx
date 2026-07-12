@@ -65,27 +65,29 @@ export default function Notifications() {
 
   return (
     <PageLayout maxWidth="max-w-xl">
-      <Heading level={3}>Notifications</Heading>
+      <div className="flex flex-col gap-6">
+        <Heading level={3}>Notifications</Heading>
 
-      {items.length === 0 && !loading ? (
-        <Text variant="muted">No notifications yet.</Text>
-      ) : (
-        <>
-          {items.map((item) => (
-            <NotifRow key={item.id} item={item} />
-          ))}
-        </>
-      )}
+        {items.length === 0 && !loading ? (
+          <Text variant="muted">No notifications yet.</Text>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {items.map((item) => (
+              <NotifRow key={item.id} item={item} />
+            ))}
+          </div>
+        )}
 
-      {loading && <Text variant="muted">Loading...</Text>}
+        {loading && <Text variant="muted">Loading...</Text>}
 
-      {nextCursor !== null && !loading && (
-        <div className="flex justify-center">
-          <Btn size="sm" onClick={loadMore}>
-            Load more
-          </Btn>
-        </div>
-      )}
+        {nextCursor !== null && !loading && (
+          <div className="flex justify-center">
+            <Btn size="sm" onClick={loadMore}>
+              Load more
+            </Btn>
+          </div>
+        )}
+      </div>
     </PageLayout>
   );
 }
