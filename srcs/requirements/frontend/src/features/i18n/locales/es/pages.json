@@ -127,11 +127,7 @@
     "timed_out": "¡Se acabó el tiempo!",
     "hud_time": "Tiempo",
     "hud_wpm": "PPM",
-    "ordinals": [
-      "1º",
-      "2º",
-      "3º"
-    ],
+    "ordinals": ["1º", "2º", "3º"],
     "you": "Tú",
     "player": "Jugador {{n}}",
     "type_here": "Escribe aquí...",

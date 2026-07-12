@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Input from './Input';
 import { List } from './List';
@@ -59,9 +59,7 @@ export function SearchList<T extends ListItem>({
         <p className="text-dim text-sm text-center font-mono">{t('search.min_chars')}</p>
       )}
 
-      {loading && (
-        <p className="text-dim text-sm text-center font-mono">{t('loading')}</p>
-      )}
+      {loading && <p className="text-dim text-sm text-center font-mono">{t('loading')}</p>}
 
       {!loading && !tooShort && query.trim() && visibleItems.length === 0 && (
         <p className="text-dim text-sm text-center font-mono">
@@ -71,16 +69,9 @@ export function SearchList<T extends ListItem>({
 
       {visibleItems.length > 0 && (
         <>
-          <List
-            items={visibleItems}
-            renderItem={(item) => renderItem(item)}
-          />
+          <List items={visibleItems} renderItem={(item) => renderItem(item)} />
           {totalPages > 1 && (
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={setPage}
-            />
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           )}
         </>
       )}

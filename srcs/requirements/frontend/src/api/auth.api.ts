@@ -1,5 +1,11 @@
-import { type SafeUser } from "@backend/common/types";
-import { handleResponse, authHeaders, API_AUTH_ME, API_AUTH_LOGIN, API_AUTH_REGISTER } from '@/api/config.api'
+import { type SafeUser } from '@backend/common/types';
+import {
+  handleResponse,
+  authHeaders,
+  API_AUTH_ME,
+  API_AUTH_LOGIN,
+  API_AUTH_REGISTER,
+} from '@/api/config.api';
 
 export async function loginApi(
   identifier: string,

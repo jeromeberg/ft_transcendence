@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Alert, Avatar, List, Heading, Text } from "@/components";
-import { chatApi, type ChatConversation } from "@/api/chat.api";
-import { NewChat } from ".";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Alert, Avatar, List, Heading, Text } from '@/components';
+import { chatApi, type ChatConversation } from '@/api/chat.api';
+import { NewChat } from '.';
 
 function formatConvTime(dateStr: string, tYesterday: string, locale: string): string {
   const date = new Date(dateStr);
@@ -14,8 +14,7 @@ function formatConvTime(dateStr: string, tYesterday: string, locale: string): st
   if (date.toDateString() === now.toDateString())
     return date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
 
-  if (date.toDateString() === yesterday.toDateString())
-    return tYesterday;
+  if (date.toDateString() === yesterday.toDateString()) return tYesterday;
 
   if (now.getTime() - date.getTime() < 7 * 24 * 3600 * 1000)
     return date.toLocaleDateString(locale, { weekday: 'short' });
@@ -49,8 +48,7 @@ export function ChatsList({ onSelectChat, selectedUsername, refreshKey }: ChatsL
       })
       .catch((err: unknown) => {
         if (cancelled) return;
-        const message =
-          err instanceof Error ? err.message : t('chat.error_load');
+        const message = err instanceof Error ? err.message : t('chat.error_load');
         setError(message);
         setChats([]);
       })
@@ -81,7 +79,7 @@ export function ChatsList({ onSelectChat, selectedUsername, refreshKey }: ChatsL
           className="mt-4"
           items={chats.map((c) => ({ ...c, id: c.user.id }))}
           getItemClassName={(item) =>
-            `!p-0 cursor-pointer${item.user.username === selectedUsername ? " !border-2 !border-default" : ""}`
+            `!p-0 cursor-pointer${item.user.username === selectedUsername ? ' !border-2 !border-default' : ''}`
           }
           renderItem={(item) => {
             return (
@@ -98,9 +96,15 @@ export function ChatsList({ onSelectChat, selectedUsername, refreshKey }: ChatsL
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <Text className="truncate font-bold">{item.user.username}</Text>
-                      {item.sentAt && <Text size="xs" variant="muted" className="shrink-0">{formatConvTime(item.sentAt, t('chat.yesterday'), i18n.language)}</Text>}
+                      {item.sentAt && (
+                        <Text size="xs" variant="muted" className="shrink-0">
+                          {formatConvTime(item.sentAt, t('chat.yesterday'), i18n.language)}
+                        </Text>
+                      )}
                     </div>
-                    <Text className="truncate" variant="muted">{item.lastMessage}</Text>
+                    <Text className="truncate" variant="muted">
+                      {item.lastMessage}
+                    </Text>
                   </div>
                 </div>
               </button>

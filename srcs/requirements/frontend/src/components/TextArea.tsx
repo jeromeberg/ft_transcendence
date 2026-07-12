@@ -1,4 +1,4 @@
-import { type TextareaHTMLAttributes, forwardRef } from "react";
+import { type TextareaHTMLAttributes, forwardRef } from 'react';
 
 /*
 
@@ -11,7 +11,7 @@ Examples:
 
 */
 
-type TextAreaVariant = "default" | "ghost";
+type TextAreaVariant = 'default' | 'ghost';
 
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   variant?: TextAreaVariant;
@@ -21,27 +21,23 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 
 const variantClasses: Record<TextAreaVariant, string> = {
   default:
-    "bg-black border border-dim text-default " +
-    "placeholder-muted " +
-    "focus:outline-none focus:border-default focus:shadow-[0_0_8px_0_rgba(0,255,65,0.25)]",
+    'bg-black border border-dim text-default ' +
+    'placeholder-muted ' +
+    'focus:outline-none focus:border-default focus:shadow-[0_0_8px_0_rgba(0,255,65,0.25)]',
 
   ghost:
-    "bg-transparent border-b border-dim text-default " +
-    "placeholder-muted " +
-    "focus:outline-none focus:border-default",
+    'bg-transparent border-b border-dim text-default ' +
+    'placeholder-muted ' +
+    'focus:outline-none focus:border-default',
 };
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function TextArea(
-  { variant = "default", label, error, className = "", rows = 4, ...props },
-  ref
+  { variant = 'default', label, error, className = '', rows = 4, ...props },
+  ref,
 ) {
   return (
     <div className="flex flex-col gap-1 font-mono w-full">
-      {label && (
-        <label className="text-xs uppercase tracking-widest text-dim">
-          {label}
-        </label>
-      )}
+      {label && <label className="text-xs uppercase tracking-widest text-dim">{label}</label>}
 
       <div className="relative flex items-start">
         <span className="absolute left-3 top-2 text-default select-none pointer-events-none opacity-70">
@@ -51,19 +47,17 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function TextAre
           ref={ref}
           rows={rows}
           className={[
-            "w-full pl-7 pr-3 py-2 text-sm transition-colors duration-100 caret-default resize-vertical",
+            'w-full pl-7 pr-3 py-2 text-sm transition-colors duration-100 caret-default resize-vertical',
             variantClasses[variant],
-            error ? "border-danger focus:border-danger focus:shadow-[0_0_8px_0_rgba(255,49,49,0.25)]" : "",
+            error
+              ? 'border-danger focus:border-danger focus:shadow-[0_0_8px_0_rgba(255,49,49,0.25)]'
+              : '',
             className,
-          ].join(" ")}
+          ].join(' ')}
           {...props}
         />
       </div>
-      {error && (
-        <span className="text-xs text-danger tracking-wide">
-          ! {error}
-        </span>
-      )}
+      {error && <span className="text-xs text-danger tracking-wide">! {error}</span>}
     </div>
   );
 });

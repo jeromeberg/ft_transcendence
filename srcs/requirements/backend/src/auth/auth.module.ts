@@ -6,15 +6,15 @@ import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [
-    UsersModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'fallback_secret',
-      signOptions: { expiresIn: (process.env.JWT_SECRET_EXP || '24h') as `${number}h` },
-    }),
-  ],
-  providers: [AuthService, JwtStrategy],
-  controllers: [AuthController],
-  exports: [AuthService, JwtModule],
+    imports: [
+        UsersModule,
+        JwtModule.register({
+            secret: process.env.JWT_SECRET || 'fallback_secret',
+            signOptions: { expiresIn: (process.env.JWT_SECRET_EXP || '24h') as `${number}h` },
+        }),
+    ],
+    providers: [AuthService, JwtStrategy],
+    controllers: [AuthController],
+    exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

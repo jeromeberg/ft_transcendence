@@ -3,7 +3,6 @@ import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SendMessageDto {
-
     @ApiProperty({ example: 'johndoe', description: 'Username du destinataire' })
     @IsString()
     @IsNotEmpty()

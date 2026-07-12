@@ -1,4 +1,4 @@
-import { type ElementType, type ComponentPropsWithoutRef } from "react";
+import { type ElementType, type ComponentPropsWithoutRef } from 'react';
 
 /*
 
@@ -22,8 +22,8 @@ Examples:
 
 */
 
-type BtnVariant = "primary" | "secondary" | "ghost" | "danger" | "terminal";
-type BtnSize    = "sm" | "md" | "lg";
+type BtnVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'terminal';
+type BtnSize = 'sm' | 'md' | 'lg';
 
 type BtnOwnProps<E extends ElementType> = {
   as?: E;
@@ -32,65 +32,65 @@ type BtnOwnProps<E extends ElementType> = {
   className?: string;
 };
 
-type BtnProps<E extends ElementType = "button"> = BtnOwnProps<E> &
+type BtnProps<E extends ElementType = 'button'> = BtnOwnProps<E> &
   Omit<ComponentPropsWithoutRef<E>, keyof BtnOwnProps<E>>;
 
 const variantClasses: Record<BtnVariant, string> = {
   primary:
-    "bg-default text-black border border-default " +
-    "hover:bg-dim " +
-    "active:bg-dim " +
-     "disabled:opacity-40 disabled:bg-default disabled:text-black disabled:border-default disabled:cursor-not-allowed disabled:saturate-0",
+    'bg-default text-black border border-default ' +
+    'hover:bg-dim ' +
+    'active:bg-dim ' +
+    'disabled:opacity-40 disabled:bg-default disabled:text-black disabled:border-default disabled:cursor-not-allowed disabled:saturate-0',
 
   secondary:
-    "bg-transparent text-default border border-default " +
-    "hover:bg-default hover:text-black " +
-    "active:bg-dim " +
-    "disabled:opacity-30 disabled:cursor-not-allowed",
+    'bg-transparent text-default border border-default ' +
+    'hover:bg-default hover:text-black ' +
+    'active:bg-dim ' +
+    'disabled:opacity-30 disabled:cursor-not-allowed',
 
   ghost:
-    "bg-transparent text-default border border-transparent " +
-    "hover:border-dim hover:bg-muted " +
-    "active:bg-dim " +
-    "disabled:opacity-30 disabled:cursor-not-allowed",
+    'bg-transparent text-default border border-transparent ' +
+    'hover:border-dim hover:bg-muted ' +
+    'active:bg-dim ' +
+    'disabled:opacity-30 disabled:cursor-not-allowed',
 
   danger:
-    "bg-transparent text-danger border border-danger " +
-    "hover:bg-danger hover:text-black " +
-    "active:opacity-80 " +
-    "disabled:opacity-30 disabled:cursor-not-allowed",
+    'bg-transparent text-danger border border-danger ' +
+    'hover:bg-danger hover:text-black ' +
+    'active:opacity-80 ' +
+    'disabled:opacity-30 disabled:cursor-not-allowed',
 
   // Terminal command: bracketed dim label that lights up green on hover (matches nav [*] style).
   terminal:
-    "bg-transparent text-dim border-0 " +
-    "hover:text-default " +
-    "active:opacity-80 " +
-    "disabled:opacity-30 disabled:cursor-not-allowed",
+    'bg-transparent text-dim border-0 ' +
+    'hover:text-default ' +
+    'active:opacity-80 ' +
+    'disabled:opacity-30 disabled:cursor-not-allowed',
 };
 
 const sizeClasses: Record<BtnSize, string> = {
-  sm: "px-3 py-1 text-xs",
-  md: "px-5 py-2 text-sm",
-  lg: "px-8 py-3 text-base",
+  sm: 'px-3 py-1 text-xs',
+  md: 'px-5 py-2 text-sm',
+  lg: 'px-8 py-3 text-base',
 };
 
-export default function Btn<E extends ElementType = "button">({
+export default function Btn<E extends ElementType = 'button'>({
   as,
-  variant = "primary",
-  size = "md",
-  className = "",
+  variant = 'primary',
+  size = 'md',
+  className = '',
   children,
   ...props
 }: BtnProps<E>) {
-  const Component = as ?? "button";
+  const Component = as ?? 'button';
   return (
     <Component
       className={[
-        "font-mono uppercase tracking-widest cursor-pointer transition-all duration-100 disabled:pointer-events-none",
+        'font-mono uppercase tracking-widest cursor-pointer transition-all duration-100 disabled:pointer-events-none',
         variantClasses[variant],
         sizeClasses[size],
         className,
-      ].join(" ")}
+      ].join(' ')}
       {...props}
     >
       {children}

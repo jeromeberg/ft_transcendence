@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useEffect, useState, type ReactNode } from 'react';
 import { io, type Socket } from 'socket.io-client';
 import { useAuth } from '@/features/auth';
 import { getToken } from '@/features/auth';
@@ -55,9 +50,5 @@ export function StatusProvider({ children }: { children: ReactNode }) {
     };
   }, [user]);
 
-  return (
-    <StatusCtx.Provider value={{ liveStatuses }}>
-      {children}
-    </StatusCtx.Provider>
-  );
+  return <StatusCtx.Provider value={{ liveStatuses }}>{children}</StatusCtx.Provider>;
 }

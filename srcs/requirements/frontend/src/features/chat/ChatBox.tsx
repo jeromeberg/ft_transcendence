@@ -4,6 +4,7 @@ import { useAuth } from '@/features/auth';
 import { Text, Container } from '@/components';
 import { Messages, ChatForm, ChatHeader, useChatCtx } from '.';
 import { chatApi, type ChatMessage, type IncomingChatMessageEvent } from '@/api/chat.api';
+import { useNotifCtx, notifPayloadString } from '@/features/notifications';
 
 interface ChatBoxProps {
   targetUsername?: string | null;
@@ -13,13 +14,13 @@ interface ChatBoxProps {
 export function ChatBox({ targetUsername, onMessageSent }: ChatBoxProps) {
   const { t } = useTranslation(['pages', 'common']);
   const { user } = useAuth();
-  const { chatSocket, clearUnreadMessages } = useChatCtx();
+  const { chatSocket } = useChatCtx();
+  const { items, markRead } = useNotifCtx();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    clearUnreadMessages();
     if (!targetUsername) {
       setMessages([]);
       setIsLoading(false);
@@ -40,6 +41,21 @@ export function ChatBox({ targetUsername, onMessageSent }: ChatBoxProps) {
 
     fetchHistory();
   }, [targetUsername]);
+
+  // Mark CHAT_MESSAGE notifications from the current conversation as read
+  useEffect(() => {
+    if (!targetUsername) return;
+    const unread = items
+      .filter(
+        (n) =>
+          n.type === 'CHAT_MESSAGE' &&
+          !n.readAt &&
+          notifPayloadString(n, 'fromUsername') === targetUsername,
+      )
+      .map((n) => n.id);
+    if (!unread.length) return;
+    markRead(unread);
+  }, [items, targetUsername, markRead]);
 
   useEffect(() => {
     if (!chatSocket || !targetUsername) return;
@@ -67,7 +83,6 @@ export function ChatBox({ targetUsername, onMessageSent }: ChatBoxProps) {
         },
       ]);
       onMessageSent?.();
-      clearUnreadMessages();
     };
 
     chatSocket.on('receive_message', handleReceiveMessage);
@@ -112,15 +127,20 @@ export function ChatBox({ targetUsername, onMessageSent }: ChatBoxProps) {
   return (
     <div className="flex h-full min-h-0 w-full flex-col gap-4">
       {!targetUsername ? (
-          <Text variant="dim">{t('chat.no_chat_selected')}</Text>
+        <Text variant="dim">{t('chat.no_chat_selected')}</Text>
       ) : (
         <>
           <ChatHeader username={targetUsername} />
 
           {isLoading ? (
-            <div><Text variant="dim">{t('common:loading')}</Text></div>
+            <div>
+              <Text variant="dim">{t('common:loading')}</Text>
+            </div>
           ) : (
-            <Container variant="terminal" className="flex flex-col h-[62dvh] sm:h-[65dvh] !p-2 sm:!p-4">
+            <Container
+              variant="terminal"
+              className="flex flex-col h-[62dvh] sm:h-[65dvh] !p-2 sm:!p-4"
+            >
               <Messages messages={messages} currentUserId={user?.id} />
               <ChatForm onSendMessage={handleSendMessage} />
             </Container>

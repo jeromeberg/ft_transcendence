@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Heading, PageLayout, Container } from "@/components";
+import { Heading, PageLayout, Container } from '@/components';
 import { getAllQuotes } from '@/api/quote.api';
 import type { Quote } from '@/types/api';
 import { NewQuoteForm, AllQuotes } from '@/features/admin';
@@ -32,15 +32,11 @@ export default function Admin() {
         <Heading level={2}>Manage quotes</Heading>
 
         <Container label="new quote">
-          <NewQuoteForm 
-            onQuoteCreated={fetchQuotes}
-            onError={setError}
-            error={error}
-          />
+          <NewQuoteForm onQuoteCreated={fetchQuotes} onError={setError} error={error} />
         </Container>
 
         <Container label="quotes">
-          <AllQuotes 
+          <AllQuotes
             quotes={quotes}
             loading={loading}
             onQuotesUpdated={fetchQuotes}

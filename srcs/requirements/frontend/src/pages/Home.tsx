@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { MatrixRain, PillButton } from "@/components";
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { MatrixRain, PillButton } from '@/components';
 
 export default function Home() {
   const { t } = useTranslation('pages');
@@ -16,8 +16,10 @@ export default function Home() {
         <span className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-default" />
         <span className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-default" />
         <div className="flex flex-col gap-2">
-          <h1 className="text-5xl sm:text-8xl font-bold font-mono tracking-[0.3em] uppercase text-default"
-              style={{ textShadow: '0 0 20px currentColor, 0 0 40px currentColor' }}>
+          <h1
+            className="text-5xl sm:text-8xl font-bold font-mono tracking-[0.3em] uppercase text-default"
+            style={{ textShadow: '0 0 20px currentColor, 0 0 40px currentColor' }}
+          >
             TYPERUN
           </h1>
           <p className="text-dim font-mono text-sm tracking-widest uppercase">
@@ -26,7 +28,10 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <PillButton color="red" onClick={() => navigate('/play/multiplayer', { state: { fromApp: true } })}>
+          <PillButton
+            color="red"
+            onClick={() => navigate('/play/multiplayer', { state: { fromApp: true } })}
+          >
             {t('play.enter_race')}
           </PillButton>
           <PillButton color="blue" onClick={() => navigate('/play/practice')}>

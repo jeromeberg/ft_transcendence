@@ -13,7 +13,7 @@ Sizes:
 - xl (24*24) -> used for /profile
 */
 
-type AvatarSize = "sm" | "md" | "lg" | "xl";
+type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 interface AvatarProps {
   username: string;
@@ -23,31 +23,27 @@ interface AvatarProps {
 }
 
 const sizeClasses: Record<AvatarSize, string> = {
-  sm: "w-6 h-6 text-xs",
-  md: "w-10 h-10",
-  lg: "w-12 h-12 text-xl",
-  xl: "w-24 h-24 text-2xl",
+  sm: 'w-6 h-6 text-xs',
+  md: 'w-10 h-10',
+  lg: 'w-12 h-12 text-xl',
+  xl: 'w-24 h-24 text-2xl',
 };
 
-export function Avatar({ username, src, size = "md", className = "" }: AvatarProps) {
+export function Avatar({ username, src, size = 'md', className = '' }: AvatarProps) {
   const initial = username.charAt(0).toUpperCase();
 
   return (
     <div
       className={[
-        "shrink-0 border-1 border-default overflow-hidden",
-        "flex items-center justify-center font-mono font-bold",
-        "text-default bg-black",
+        'shrink-0 border-1 border-default overflow-hidden',
+        'flex items-center justify-center font-mono font-bold',
+        'text-default bg-black',
         sizeClasses[size],
         className,
-      ].join(" ")}
+      ].join(' ')}
     >
       {src ? (
-        <img
-          src={src}
-          alt={username}
-          className="w-full h-full object-cover"
-        />
+        <img src={src} alt={username} className="w-full h-full object-cover" />
       ) : (
         <span>{initial}</span>
       )}

@@ -1,11 +1,5 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react';
-import type { SafeUser } from "@backend/common/types";
+import { createContext, useCallback, useEffect, useState, type ReactNode } from 'react';
+import type { SafeUser } from '@backend/common/types';
 import { getMeApi, loginApi, registerApi } from '@/api/auth.api';
 import i18n, { DB_LANG_MAP } from '@/features/i18n';
 
@@ -32,8 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function applyUser(u: SafeUser) {
     setUser(u);
     const lang = DB_LANG_MAP[u.language];
-    if (lang)
-      i18n.changeLanguage(lang);
+    if (lang) i18n.changeLanguage(lang);
   }
 
   useEffect(() => {
@@ -69,9 +62,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const loginWithToken = useCallback(async (token: string) => {
-      localStorage.setItem(TOKEN_KEY, token);
-      const me = await getMeApi(token);
-      setUser(me);
+    localStorage.setItem(TOKEN_KEY, token);
+    const me = await getMeApi(token);
+    setUser(me);
   }, []);
 
   const refreshUser = useCallback(async () => {
@@ -82,7 +75,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, loginWithToken, refreshUser }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, logout, loginWithToken, refreshUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

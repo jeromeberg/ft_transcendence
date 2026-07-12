@@ -1,4 +1,4 @@
-import { API_USERS, authHeaders, handleResponse } from '@/api/config.api'
+import { API_USERS, authHeaders, handleResponse } from '@/api/config.api';
 import type { UserAchievementDto } from '@/types/api';
 import type { UserProfileDto, UserStatsDto } from '@/types/api';
 
@@ -57,28 +57,31 @@ export async function getUserProfile(username: string): Promise<UserProfile> {
   return handleResponse<UserProfile>(res);
 }
 
-export async function getUserHistory( username: string, page = 1, limit = 10): Promise<{ data: HistoryEntry[]; total: number; totalPages: number }> {
+export async function getUserHistory(
+  username: string,
+  page = 1,
+  limit = 10,
+): Promise<{ data: HistoryEntry[]; total: number; totalPages: number }> {
   const res = await fetch(
-    `${API_USERS}/${encodeURIComponent(username)}/history?page=${page}&limit=${limit}`, {
-      headers: authHeaders()
-    });
+    `${API_USERS}/${encodeURIComponent(username)}/history?page=${page}&limit=${limit}`,
+    {
+      headers: authHeaders(),
+    },
+  );
   return handleResponse<{ data: HistoryEntry[]; total: number; totalPages: number }>(res);
 }
 
-
 export async function updateMyBio(bio: string): Promise<{ bio: string | null }> {
   const res = await fetch(`${API_USERS}/me`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
       ...authHeaders(),
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ bio }),
   });
 
   return handleResponse<{ bio: string | null }>(res);
-
-  
 }
 
 export type UpdateSettingsPayload = {
@@ -92,8 +95,8 @@ export async function updateSettings(
   payload: UpdateSettingsPayload,
 ): Promise<{ email?: string; language?: string }> {
   const res = await fetch(`${API_USERS}/me/settings`, {
-    method: "PATCH",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    method: 'PATCH',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
   return handleResponse<{ email?: string; language?: string }>(res);
@@ -122,4 +125,3 @@ export async function uploadAvatar(file: File): Promise<{ avatarUrl: string }> {
   });
   return handleResponse<{ avatarUrl: string }>(res);
 }
-

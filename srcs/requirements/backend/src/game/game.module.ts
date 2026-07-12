@@ -10,7 +10,7 @@ import { AchievementModule } from '../achievement/achievement.module';
 import { QuoteModule } from '../quote/quote.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, PrismaModule, AchievementModule, QuoteModule],
-  providers: [GameService, BotService, GameGateway, WsJwtGuard],
+    imports: [AuthModule, UsersModule, PrismaModule, AchievementModule, QuoteModule],
+    providers: [GameService, BotService, GameGateway, WsJwtGuard],
 })
 export class GameModule {}

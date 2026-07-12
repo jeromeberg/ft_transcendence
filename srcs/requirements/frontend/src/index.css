@@ -1,17 +1,19 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-black: #080808;
   --color-default: #00ff41;
   --color-danger: #ff3131;
   --color-accent: #00ffe7;
-  --color-dim: #00B72E;
+  --color-dim: #00b72e;
   --color-muted: #1a4d1a;
   --color-glow: #39ff14;
 }
 
 @layer base {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     border-radius: 0 !important;
     box-sizing: border-box;
   }
@@ -21,12 +23,16 @@
   }
 
   body::before {
-    content: "";
+    content: '';
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image: radial-gradient(circle 400px at 50% 150px, rgba(0, 255, 65, 0.32), transparent);
+    background-image: radial-gradient(
+      circle 400px at 50% 150px,
+      rgba(0, 255, 65, 0.32),
+      transparent
+    );
   }
 
   body:has(.no-background)::before {
@@ -36,7 +42,7 @@
   body {
     background-color: var(--color-black);
     color: var(--color-default);
-    font-family: "Courier New", Courier, monospace;
+    font-family: 'Courier New', Courier, monospace;
   }
 
   ::selection {

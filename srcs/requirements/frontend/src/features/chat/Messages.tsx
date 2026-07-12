@@ -9,17 +9,20 @@ interface MessagesProps {
   currentUserId?: number;
 }
 
-function formatDayLabel(dateStr: string, tToday: string, tYesterday: string, locale: string): string {
+function formatDayLabel(
+  dateStr: string,
+  tToday: string,
+  tYesterday: string,
+  locale: string,
+): string {
   const date = new Date(dateStr);
   const now = new Date();
   const yesterday = new Date(now);
 
   yesterday.setDate(now.getDate() - 1);
 
-  if (date.toDateString() === now.toDateString())
-    return tToday;
-  if (date.toDateString() === yesterday.toDateString())
-    return tYesterday;
+  if (date.toDateString() === now.toDateString()) return tToday;
+  if (date.toDateString() === yesterday.toDateString()) return tYesterday;
   return date.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
@@ -52,11 +55,21 @@ export function Messages({ messages, currentUserId }: MessagesProps) {
                 {showSeparator && (
                   <div className="flex items-center gap-3 my-4">
                     <div className="flex-1 border-t border-dim" />
-                    <Text size="xs" variant="muted">{formatDayLabel(msg.sentAt, t('chat.today'), t('chat.yesterday'), i18n.language)}</Text>
+                    <Text size="xs" variant="muted">
+                      {formatDayLabel(
+                        msg.sentAt,
+                        t('chat.today'),
+                        t('chat.yesterday'),
+                        i18n.language,
+                      )}
+                    </Text>
                     <div className="flex-1 border-t border-dim" />
                   </div>
                 )}
-                <Message message={msg} isOwn={currentUserId !== undefined && msg.senderId === currentUserId} />
+                <Message
+                  message={msg}
+                  isOwn={currentUserId !== undefined && msg.senderId === currentUserId}
+                />
               </div>
             );
           })}

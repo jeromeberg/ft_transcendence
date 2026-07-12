@@ -53,7 +53,7 @@ export async function deleteQuote(id: number): Promise<Quote> {
 
 export async function editQuote(
   id: number,
-  updates: { text?: string; type?: string; active?: boolean }
+  updates: { text?: string; type?: string; active?: boolean },
 ): Promise<Quote> {
   const res = await fetch(`${API_QUOTES}/${id}`, {
     method: 'PATCH',

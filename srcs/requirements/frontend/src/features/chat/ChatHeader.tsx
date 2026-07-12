@@ -40,7 +40,13 @@ export function ChatHeader({ username }: ChatHeaderProps) {
           <Status status={displayedStatus} hoverText={displayedStatus} /> {profile.username}
         </Heading>
       </div>
-      <Btn as={Link} to={`/profile/${profile.username}`} variant="primary" size="sm" className="shrink-0 text-xs sm:text-xs">
+      <Btn
+        as={Link}
+        to={`/profile/${profile.username}`}
+        variant="primary"
+        size="sm"
+        className="shrink-0 text-xs sm:text-xs"
+      >
         {t('chat.view_profile')}
       </Btn>
     </div>

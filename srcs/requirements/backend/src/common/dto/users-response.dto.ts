@@ -11,7 +11,8 @@ export class UserStatsDto {
 export class UserProfileDto {
     @ApiProperty({ example: 1 }) id: number;
     @ApiProperty({ example: 'johndoe' }) username: string;
-    @ApiProperty({ example: 'https://cloudinary.com/avatar.jpg', nullable: true }) avatarUrl: string | null;
+    @ApiProperty({ example: 'https://cloudinary.com/avatar.jpg', nullable: true }) avatarUrl:
+        string | null;
     @ApiProperty({ example: 'Hello world', nullable: true }) bio: string | null;
     @ApiProperty({ example: 'ONLINE' }) status: string;
     @ApiProperty({ example: 'EN' }) language: string;
@@ -28,6 +29,7 @@ export class AvatarResponseDto {
 export class UserSearchDto {
     @ApiProperty({ example: 1 }) id: number;
     @ApiProperty({ example: 'johndoe' }) username: string;
-    @ApiProperty({ example: 'https://cloudinary.com/avatar.jpg', nullable: true }) avatarUrl: string | null;
+    @ApiProperty({ example: 'https://cloudinary.com/avatar.jpg', nullable: true }) avatarUrl:
+        string | null;
     @ApiProperty({ example: 'ONLINE' }) status: string;
 }

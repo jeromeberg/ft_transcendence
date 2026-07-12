@@ -127,11 +127,7 @@
     "timed_out": "Temps écoulé !",
     "hud_time": "Temps",
     "hud_wpm": "MPM",
-    "ordinals": [
-      "1er",
-      "2e",
-      "3e"
-    ],
+    "ordinals": ["1er", "2e", "3e"],
     "you": "Vous",
     "player": "Joueur {{n}}",
     "type_here": "Tapez ici...",

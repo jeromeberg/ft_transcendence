@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import RaceTrack from "./RaceTrack";
-import HUD from "./HUD";
-import TypingInput from "./TypingInput";
-import { Btn, Container, StatCard, StatItem, StatDivider } from "@/components";
-import { useGameState } from "@/hooks/useGameState";
-import type { Racer, RaceResult } from "@/hooks/useRaceSocket";
+import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import RaceTrack from './RaceTrack';
+import HUD from './HUD';
+import TypingInput from './TypingInput';
+import { Btn, Container, StatCard, StatItem, StatDivider } from '@/components';
+import { useGameState } from '@/hooks/useGameState';
+import type { Racer, RaceResult } from '@/hooks/useRaceSocket';
 
-import { MIN_RACE_SECONDS, MIN_CHARS_PER_SEC } from "@backend/common/game.constant";
+import { MIN_RACE_SECONDS, MIN_CHARS_PER_SEC } from '@backend/common/game.constant';
 
 function formatTime(s: number): string {
-  const mm = String(Math.floor(s / 60)).padStart(2, "0");
-  const ss = String(s % 60).padStart(2, "0");
+  const mm = String(Math.floor(s / 60)).padStart(2, '0');
+  const ss = String(s % 60).padStart(2, '0');
   return `${mm}:${ss}`;
 }
 
@@ -33,10 +33,20 @@ type Props = {
 };
 
 export default function GameArena({
-  overlay, onReplay, practice = false,
-  multiplayer = false, serverText, racers = [], youPid, liveFinishOrder = [],
-  results, playerCount = 0, myPosition = null, onProgress,
-  started = true, status = null,
+  overlay,
+  onReplay,
+  practice = false,
+  multiplayer = false,
+  serverText,
+  racers = [],
+  youPid,
+  liveFinishOrder = [],
+  results,
+  playerCount = 0,
+  myPosition = null,
+  onProgress,
+  started = true,
+  status = null,
 }: Props) {
   const { t } = useTranslation('pages');
   const active = started && overlay == null;
@@ -53,10 +63,21 @@ export default function GameArena({
       : undefined;
 
   const {
-    passage, words, wordIndex, typed,
-    handleType, completeWord,
-    elapsed, timeLeft, wpm, progress, playerDone, timedOut,
-    finishTime, accuracy, totalCorrect,
+    passage,
+    words,
+    wordIndex,
+    typed,
+    handleType,
+    completeWord,
+    elapsed,
+    timeLeft,
+    wpm,
+    progress,
+    playerDone,
+    timedOut,
+    finishTime,
+    accuracy,
+    totalCorrect,
   } = useGameState(
     active,
     multiplayer ? serverFinished : allDone,
@@ -75,12 +96,12 @@ export default function GameArena({
 
   const ordinals = t('play.ordinals', { returnObjects: true }) as string[];
 
-  const myResult = multiplayer && results ? results.find(r => r.pid === youPid) : undefined;
+  const myResult = multiplayer && results ? results.find((r) => r.pid === youPid) : undefined;
   const mpFinished = serverFinished;
 
   const playerPlace = finishOrder.indexOf(0);
 
-  const effectiveFinish = multiplayer ? (playerDone || mpFinished) : playerDone;
+  const effectiveFinish = multiplayer ? playerDone || mpFinished : playerDone;
 
   return (
     <div className="w-full flex justify-center">
@@ -136,9 +157,13 @@ export default function GameArena({
                   </div>
                 )}
                 <StatCard label={t('play.results_label')}>
-                  <StatItem label={t('play.stat_wpm')}      value={myResult ? Math.round(myResult.wpm) : wpm} accent />
+                  <StatItem
+                    label={t('play.stat_wpm')}
+                    value={myResult ? Math.round(myResult.wpm) : wpm}
+                    accent
+                  />
                   <StatDivider />
-                  <StatItem label={t('play.stat_time')}     value={formatTime(finishTime ?? elapsed)} />
+                  <StatItem label={t('play.stat_time')} value={formatTime(finishTime ?? elapsed)} />
                   <StatDivider />
                   <StatItem label={t('play.stat_accuracy')} value={`${accuracy}%`} />
                   {multiplayer ? (
@@ -146,17 +171,23 @@ export default function GameArena({
                       <StatDivider />
                       <StatItem
                         label={t('play.stat_position')}
-                        value={(myResult?.position ?? myPosition) != null ? `${myResult?.position ?? myPosition} / ${playerCount}` : "—"}
+                        value={
+                          (myResult?.position ?? myPosition) != null
+                            ? `${myResult?.position ?? myPosition} / ${playerCount}`
+                            : '—'
+                        }
                       />
                     </>
-                  ) : !practice && (
-                    <>
-                      <StatDivider />
-                      <StatItem
-                        label={t('play.stat_position')}
-                        value={playerPlace >= 0 ? (ordinals[playerPlace] ?? "—") : "—"}
-                      />
-                    </>
+                  ) : (
+                    !practice && (
+                      <>
+                        <StatDivider />
+                        <StatItem
+                          label={t('play.stat_position')}
+                          value={playerPlace >= 0 ? (ordinals[playerPlace] ?? '—') : '—'}
+                        />
+                      </>
+                    )
                   )}
                 </StatCard>
                 <div className="flex justify-center">

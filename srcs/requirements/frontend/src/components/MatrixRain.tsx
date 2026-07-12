@@ -5,8 +5,15 @@ function randomInt(min: number, max: number) {
 }
 
 const WORDS = [
-  'COMMON_CORE', 'TYPERUN', 'FT_TRANSCENDENCE',
-  'JEROME', 'AKHMED', 'TIMOTHEE', 'AXEL', 'KEVIN', '42'
+  'COMMON_CORE',
+  'TYPERUN',
+  'FT_TRANSCENDENCE',
+  'JEROME',
+  'AKHMED',
+  'TIMOTHEE',
+  'AXEL',
+  'KEVIN',
+  '42',
 ];
 
 const SPECIAL = '{}[]()<>;:=!|/\\&#@%*+-_~^$';
@@ -52,12 +59,10 @@ export default function MatrixRain() {
 
   useEffect(() => {
     const canvas = ref.current;
-    if (!canvas)
-      return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    if (!ctx)
-      return;
+    if (!ctx) return;
 
     let frameId = 0;
     let columns: Column[] = [];
@@ -80,7 +85,7 @@ export default function MatrixRain() {
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       charSize = Math.max(14, Math.min(width, height) * 0.02);
-      ctx!.font = (charSize * 0.85) + 'px monospace';
+      ctx!.font = charSize * 0.85 + 'px monospace';
       ctx!.textAlign = 'center';
       ctx!.textBaseline = 'middle';
 
@@ -150,8 +155,7 @@ export default function MatrixRain() {
 
       ctx!.clearRect(left, top, charSize, charSize);
 
-      if (cell.glow && cell.ch !== ' ')
-        ctx!.drawImage(halo!, left, top, charSize, charSize);
+      if (cell.glow && cell.ch !== ' ') ctx!.drawImage(halo!, left, top, charSize, charSize);
 
       ctx!.fillStyle = cell.color;
       ctx!.fillText(cell.ch, left + charSize / 2, top + charSize / 2);
@@ -159,9 +163,7 @@ export default function MatrixRain() {
 
     function drawAll() {
       ctx!.clearRect(0, 0, width, height);
-      for (let c = 0; c < columns.length; c++)
-        for (let r = 0; r < rows; r++)
-          drawCell(c, r);
+      for (let c = 0; c < columns.length; c++) for (let r = 0; r < rows; r++) drawCell(c, r);
     }
 
     function step(col: Column) {
@@ -169,12 +171,10 @@ export default function MatrixRain() {
 
       for (let i = 0; i < col.trailSize; i++) {
         const cell = col.cells[col.offset + i - col.trailSize + 1];
-        if (!cell)
-          continue;
+        if (!cell) continue;
 
         if (i === col.trailSize - 1) {
-          if (!col.wordChars)
-            cell.ch = randomChar();
+          if (!col.wordChars) cell.ch = randomChar();
           cell.color = HEAD_COLOR;
           cell.glow = true;
         } else {
@@ -206,8 +206,7 @@ export default function MatrixRain() {
 
           const start = Math.max(0, head - col.trailSize + 1);
           const end = Math.min(rows - 1, head);
-          for (let r = start; r <= end; r++)
-            drawCell(c, r);
+          for (let r = start; r <= end; r++) drawCell(c, r);
         }
       }
 
@@ -231,10 +230,5 @@ export default function MatrixRain() {
     };
   }, []);
 
-  return (
-    <canvas
-      ref={ref}
-      className="absolute inset-0 overflow-hidden pointer-events-none z-0"
-    />
-  );
+  return <canvas ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none z-0" />;
 }

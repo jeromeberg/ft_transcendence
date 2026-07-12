@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from "react";
+import { type HTMLAttributes } from 'react';
 
 /*
 
@@ -20,7 +20,7 @@ Examples:
 
 */
 
-export type ContainerVariant = "default" | "panel" | "terminal";
+export type ContainerVariant = 'default' | 'panel' | 'terminal';
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   variant?: ContainerVariant;
@@ -28,32 +28,23 @@ interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const variantClasses: Record<ContainerVariant, string> = {
-  default:
-    "bg-black/80 border border-dim",
+  default: 'bg-black/80 border border-dim',
 
-  panel:
-    "bg-dim/40 " +
-    "shadow-[0_0_12px_0_rgba(0,255,65,0.15)]",
+  panel: 'bg-dim/40 ' + 'shadow-[0_0_12px_0_rgba(0,255,65,0.15)]',
 
-  terminal:
-    "bg-black/40 " +
-    "shadow-[0_0_12px_0_rgba(0,255,65,0.15)]",
+  terminal: 'bg-black/40 ' + 'shadow-[0_0_12px_0_rgba(0,255,65,0.15)]',
 };
 
 export default function Container({
-  variant = "default",
+  variant = 'default',
   label,
-  className = "",
+  className = '',
   children,
   ...props
 }: ContainerProps) {
   return (
     <div
-      className={[
-        "relative font-mono p-4",
-        variantClasses[variant],
-        className,
-      ].join(" ")}
+      className={['relative font-mono p-4', variantClasses[variant], className].join(' ')}
       {...props}
     >
       {label && (

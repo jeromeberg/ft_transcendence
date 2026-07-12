@@ -7,12 +7,11 @@ export const API_USERS = '/api/users';
 export const API_FRIENDS = '/api/friends';
 export const API_LEADERBOARD = '/api/leaderboard';
 export const API_QUOTES = '/api/quotes';
+export const API_NOTIFS = '/api/notifications';
 
-
-export function authHeaders(token? : string | null): HeadersInit {
-    let ftoken = token;
-    if (!ftoken)
-      ftoken = getToken();
+export function authHeaders(token?: string | null): HeadersInit {
+  let ftoken = token;
+  if (!ftoken) ftoken = getToken();
   return ftoken ? { Authorization: `Bearer ${ftoken}` } : {};
 }
 

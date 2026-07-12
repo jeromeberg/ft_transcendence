@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { getRandomQuote } from "@/api/quote.api";
+import { useState, useEffect, useRef } from 'react';
+import { getRandomQuote } from '@/api/quote.api';
 
-const FALLBACK_QUOTE = "I didn't tell Mama anything. I was just about to come up and wake you so that I could tell you.";
+const FALLBACK_QUOTE =
+  "I didn't tell Mama anything. I was just about to come up and wake you so that I could tell you.";
 
 function correctPrefixLength(typed: string, word: string): number {
   let i = 0;
@@ -13,13 +14,19 @@ function calcMaxTime(passageLength: number): number {
   return Math.max(20, Math.ceil(passageLength / 2.5));
 }
 
-export function useGameState(active: boolean, forcedEnd = false, practice = false, initialText?: string, maxTimeOverride?: number) {
+export function useGameState(
+  active: boolean,
+  forcedEnd = false,
+  practice = false,
+  initialText?: string,
+  maxTimeOverride?: number,
+) {
   const [passage, setPassage] = useState<string>(() => initialText ?? FALLBACK_QUOTE);
-  const words = passage.split(" ");
+  const words = passage.split(' ');
   const maxTime = maxTimeOverride ?? calcMaxTime(passage.length);
 
   const [wordIndex, setWordIndex] = useState(0);
-  const [typed, setTyped] = useState("");
+  const [typed, setTyped] = useState('');
   const [completedChars, setCompletedChars] = useState(0);
   const [totalTyped, setTotalTyped] = useState(0);
   const [elapsed, setElapsed] = useState(0);
@@ -28,7 +35,7 @@ export function useGameState(active: boolean, forcedEnd = false, practice = fals
   const startedAt = useRef<number | null>(null);
   const hasProgressRef = useRef(false);
 
-  const currentWord = words[wordIndex] ?? "";
+  const currentWord = words[wordIndex] ?? '';
   const correctInCurrent = correctPrefixLength(typed, currentWord);
   const totalCorrect = completedChars + correctInCurrent;
   const progress = passage.length > 0 ? totalCorrect / passage.length : 0;
@@ -40,9 +47,8 @@ export function useGameState(active: boolean, forcedEnd = false, practice = fals
   const timeLeft = timedOut ? 0 : Math.max(0, maxTime - elapsed);
   const liveMinutes = startedAt.current != null ? (Date.now() - startedAt.current) / 60000 : 0;
   const wpm = lockedWpm ?? (liveMinutes > 0 ? Math.round(totalCorrect / 5 / liveMinutes) : 0);
-  const accuracy = totalTyped > 0
-    ? Math.min(100, Math.round((completedChars / totalTyped) * 100))
-    : 0;
+  const accuracy =
+    totalTyped > 0 ? Math.min(100, Math.round((completedChars / totalTyped) * 100)) : 0;
 
   const handleType = (newValue: string) => {
     if (newValue.length > typed.length) {
@@ -55,7 +61,7 @@ export function useGameState(active: boolean, forcedEnd = false, practice = fals
     const isLast = wordIndex === words.length - 1;
     setCompletedChars((c: number) => c + currentWord.length + (isLast ? 0 : 1));
     setWordIndex((i: number) => i + 1);
-    setTyped("");
+    setTyped('');
     if (!isLast) setTotalTyped((t: number) => t + 1);
   };
 
@@ -116,9 +122,19 @@ export function useGameState(active: boolean, forcedEnd = false, practice = fals
   }, [active, raceOver]);
 
   return {
-    passage, words, wordIndex, typed,
-    handleType, completeWord,
-    elapsed, timeLeft, wpm, progress, finished, playerDone, timedOut,
+    passage,
+    words,
+    wordIndex,
+    typed,
+    handleType,
+    completeWord,
+    elapsed,
+    timeLeft,
+    wpm,
+    progress,
+    finished,
+    playerDone,
+    timedOut,
     finishTime: lockedElapsed,
     accuracy,
     totalCorrect,
