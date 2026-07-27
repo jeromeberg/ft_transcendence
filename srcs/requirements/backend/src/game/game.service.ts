@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Namespace } from 'socket.io';
 import { PrismaService } from '../prisma/prisma.service';
 import { MatchStatus, UserStatus } from '@prisma/client';
@@ -49,6 +49,7 @@ export class GameService {
         private botService: BotService,
     ) {}
 
+    private readonly logger = new Logger(GameService.name);
     private server!: Namespace;
     private rooms = new Map<string, RoomState>();
     private socketToRoom = new Map<string, string>();
@@ -181,7 +182,7 @@ export class GameService {
         room.botTarget = this.botTargetFor(this.humanCount(room));
         room.waitTimer = setTimeout(() => this.onWaitTimeout(room.id), LOBBY_WAIT_MS);
         this.scheduleBotFill(room);
-        console.log(`[Lobby][${room.id}] created by ${host.username}`);
+        this.logger.log(`[Lobby][${room.id}] created by ${host.username}`);
         return room;
     }
 
@@ -196,7 +197,7 @@ export class GameService {
         for (const p of room.players.values()) {
             if (p.kind === 'bot') {
                 room.players.delete(p.pid);
-                console.log(`[Lobby][${room.id}] evicted bot ${p.pid}`);
+                this.logger.log(`[Lobby][${room.id}] evicted bot ${p.pid}`);
                 return true;
             }
         }
@@ -346,7 +347,7 @@ export class GameService {
         room.raceTimeout = setTimeout(() => void this.forceFinish(room.id), maxMs);
         room.botTicker = setInterval(() => this.botTick(room.id), BOT_TICK_MS);
 
-        console.log(
+        this.logger.log(
             `[Race][${room.id}] started / ${room.playerCount} racers (${userIds.length} users)`,
         );
     }
@@ -634,7 +635,7 @@ export class GameService {
                 results,
                 playerCount: room.playerCount,
             });
-            console.log(`[Race][${room.id}] finished / ${room.playerCount} racers`);
+            this.logger.log(`[Race][${room.id}] finished / ${room.playerCount} racers`);
             this.cleanRoom(roomId);
         }
     }
@@ -741,7 +742,7 @@ export class GameService {
         for (const p of room.players.values()) if (p.socketId) this.socketToRoom.delete(p.socketId);
         this.rooms.delete(roomId);
         this.finalizing.delete(roomId);
-        console.log(`[Room][${roomId}] deleted`);
+        this.logger.log(`[Room][${roomId}] deleted`);
     }
 
     private emitLobbyUpdate(room: RoomState): void {

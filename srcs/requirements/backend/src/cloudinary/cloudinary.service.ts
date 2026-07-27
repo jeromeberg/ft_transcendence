@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 
-const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+export const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
 const ALLOWED_MIMETYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
 @Injectable()

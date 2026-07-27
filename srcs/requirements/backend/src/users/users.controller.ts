@@ -15,6 +15,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { UpdateProfileDto, UpdateSettingsDto } from './dto';
+import { MAX_SIZE_BYTES } from '../cloudinary/cloudinary.service';
 
 //API LIMIT
 import { Throttle } from '@nestjs/throttler';
@@ -204,7 +205,12 @@ export class UsersController {
     @ApiResponse({ status: 201, type: AvatarResponseDto })
     @Throttle({ default: THROTTLE_LIMIT_UP_AVATAR })
     @UseGuards(JwtAuthGuard)
-    @UseInterceptors(FileInterceptor('avatar', { storage: memoryStorage() }))
+    @UseInterceptors(
+        FileInterceptor('avatar', {
+            storage: memoryStorage(),
+            limits: { fileSize: MAX_SIZE_BYTES },
+        }),
+    )
     @Post('me/avatar')
     async uploadAvatar(@UploadedFile() file: Express.Multer.File, @CurrentUser() user: SafeUser) {
         const url = await this.CloudinaryService.uploadAvatar(file, user.avatarUrl ?? undefined);
