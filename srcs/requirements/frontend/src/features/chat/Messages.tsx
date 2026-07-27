@@ -36,8 +36,6 @@ export function Messages({ messages, currentUserId }: MessagesProps) {
     }
   }, [messages]);
 
-  let lastDay = '';
-
   return (
     <div ref={containerRef} className="min-h-0 flex-1 overflow-y-auto p-4">
       {messages.length === 0 ? (
@@ -48,8 +46,8 @@ export function Messages({ messages, currentUserId }: MessagesProps) {
         <>
           {messages.map((msg, idx) => {
             const day = new Date(msg.sentAt).toDateString();
-            const showSeparator = day !== lastDay;
-            lastDay = day;
+            const prevDay = idx > 0 ? new Date(messages[idx - 1].sentAt).toDateString() : null;
+            const showSeparator = day !== prevDay;
             return (
               <div key={msg.id ?? idx}>
                 {showSeparator && (

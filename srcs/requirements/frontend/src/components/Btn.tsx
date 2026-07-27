@@ -85,6 +85,9 @@ export default function Btn<E extends ElementType = 'button'>({
   const Component = as ?? 'button';
   return (
     <Component
+      type={
+        !as ? ((props as { type?: 'button' | 'submit' | 'reset' }).type ?? 'button') : undefined
+      }
       className={[
         'font-mono uppercase tracking-widest cursor-pointer transition-all duration-100 disabled:pointer-events-none',
         variantClasses[variant],
