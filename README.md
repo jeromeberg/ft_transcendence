@@ -2,9 +2,8 @@
 
 # Typerun
 
-![42](https://img.shields.io/badge/42-000000?style=for-the-badge&logo=42&logoColor=white)
-![Grade: 125%](https://img.shields.io/badge/Grade-125%25-brightgreen?style=for-the-badge)
-
+![42](https://img.shields.io/badge/42-000000?style=flat&logo=42&logoColor=white)
+![Grade: 125%](https://img.shields.io/badge/Grade-125%25-brightgreen?style=flat)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
@@ -28,12 +27,20 @@ Multiplayer real-time typing game built for the 42 group project ft_transcendenc
 * **Status**: real-time status for users *(jbergero, kpires)*
 * **Internationalization**: full English, French and Spanish translation using i18n *(kpires)*
 * **Admin page**: user roles and basic administration page to manage quotes *(jbergero)*
+* **Notifications**: real notifications system *(jbergero)*
 
 ## Screenshots
 
-<img src="./assets/game.png" width="500px">
+<table>
+<tr>
+<td><img src="./assets/game.png" alt="game" width="400px" /></td>
+<td><img src="./assets/profile.png" alt="profile" width="400px" /></td>
+</tr>
+</table>
 
-<img src="./assets/profile.png" width="500px">
+
+
+
 
 ## Technical Stack
 
@@ -288,102 +295,4 @@ The team worked remotely with weekly to bi-weekly calls, daily communication on 
 
 ## Database Schema
 
-**PK**: Primary Key – **FK**: Foreign Key – **Cascade delete**: record is automatically deleted when the referenced record is deleted — **?**: Optional
-
-### User
-
-| **Field**             | **Type**                        |
-|-----------------------|---------------------------------|
-| id                    | Integer PK                      |
-| username              | String, unique                  |
-| email                 | String, unique                  |
-| passwordHash          | String?                         |
-| avatarUrl             | String?                         |
-| bio                   | String?                         |
-| role                  | Enum (USER, MOD)                |
-| language              | Enum (EN, FR, ES)               |
-| status                | Enum (ONLINE, IN_GAME, OFFLINE) |
-| createdAt / updatedAt | DateTime                        |
-
-### OAuthAccount
-
-| **Field**  | **Type**   |
-|------------|------------|
-| id         | Integer PK                          |
-| provider   | Enum (QuaranteDeux)                 |
-| providerId | String                              |
-| userId     | FK → User (cascade delete)          |
-
-### Achievement
-
-| **Field**   | **Type**       |
-|-------------|----------------|
-| id          | Integer PK     |
-| key         | String, unique |
-| label       | String         |
-| description | String         |
-| icon        | String?        |
-
-### UserAchievement
-
-| **Field**     | **Type**                          |
-|---------------|-----------------------------------|
-| id            | Integer PK                        |
-| userId        | FK → User (cascade delete)        |
-| achievementId | FK → Achievement (cascade delete) |
-| unlockedAt    | DateTime                          |
-
-### Friendship
-
-| **Field**   | **Type**                                |
-|-------------|-----------------------------------------|
-| id          | Integer PK                              |
-| initiatorId | FK → User (cascade delete)              |
-| receiverId  | FK → User (cascade delete)              |
-| status      | Enum (PENDING, ACCEPTED, BLOCKED)       |
-| createdAt   | DateTime                                |
-
-### Message
-
-| **Field**  | **Type**                   |
-|------------|----------------------------|
-| id         | Integer PK                 |
-| content    | String                     |
-| senderId   | FK → User (cascade delete) |
-| receiverId | FK → User (cascade delete) |
-| sentAt     | DateTime                   |
-
-### Match
-
-| **Field**   | **Type**                                         |
-|-------------|--------------------------------------------------|
-| id          | Integer PK                                       |
-| quoteId     | FK → Quote                                       |
-| startedAt   | DateTime                                         |
-| endedAt     | DateTime?                                        |
-| status      | Enum (WAITING, IN_PROGRESS, FINISHED, CANCELLED) |
-
-### MatchResult
-
-| **Field**  | **Type**                    |
-|------------|-----------------------------|
-| id         | Integer PK                  |
-| matchId    | FK → Match (cascade delete) |
-| userId     | FK → User (cascade delete)  |
-| wpm        | Float?                      |
-| accuracy   | Float?                      |
-| nbPlayers  | Int?                        |
-| nbBots     | Int?                        |
-| position   | Int?                        |
-| finishedAt | DateTime?                   |
-
-### Quote
-
-| **Field**  | **Type**    |
-|------------|-------------|
-| id         | Integer PK  |
-| active     | Boolean     |
-| text       | String      |
-| creatorId  | FK → User?  |
-| type       | String?     |
-| createdAt  | DateTime?   |
+Complete database schema in [docs/database.md](./docs/database.md).
