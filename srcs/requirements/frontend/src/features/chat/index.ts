@@ -5,5 +5,6 @@ export { ChatForm } from './ChatForm';
 export { ChatsList } from './ChatsList';
 export { NewChat } from './NewChat';
 export { ChatHeader } from './ChatHeader';
-export { ChatProvider, ChatCtx } from './ChatCtx';
+export { ChatProvider } from './ChatCtx';
+export { ChatCtx } from './chatContext';
 export { useChatCtx } from './useChatCtx';

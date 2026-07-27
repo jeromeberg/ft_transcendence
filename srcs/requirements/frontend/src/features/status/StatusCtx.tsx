@@ -1,16 +1,7 @@
-import { createContext, useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { io, type Socket } from 'socket.io-client';
-import { useAuth } from '@/features/auth';
-import { getToken } from '@/features/auth';
-
-export type LiveUserStatus = 'ONLINE' | 'IN_GAME' | 'OFFLINE';
-export type LiveStatusMap = Record<number, LiveUserStatus>;
-
-interface StatusCtxValue {
-  liveStatuses: LiveStatusMap;
-}
-
-export const StatusCtx = createContext<StatusCtxValue | null>(null);
+import { useAuth, getToken } from '@/features/auth';
+import { StatusCtx, type LiveStatusMap, type LiveUserStatus } from './statusContext';
 
 export function StatusProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();

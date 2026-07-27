@@ -18,5 +18,11 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // Flags the standard "fetch on mount / reset on prop change" pattern
+      // used throughout this codebase. Re-enable once effects are restructured
+      // per https://react.dev/learn/you-might-not-need-an-effect
+      'react-hooks/set-state-in-effect': 'off',
+    },
   },
 ])

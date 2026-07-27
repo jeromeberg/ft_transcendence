@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-// @ts-ignore
 import { io, Socket } from 'socket.io-client';
 import { getToken } from '@/features/auth';
 import type {
@@ -104,7 +103,7 @@ export function useRaceSocket() {
       socket.emit('join_queue');
     });
 
-    socket.on('connect_error', (err: any) => {
+    socket.on('connect_error', (err: Error) => {
       console.error('Game socket connect_error:', err);
     });
 

@@ -1,23 +1,8 @@
-import { createContext, useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import type { SafeUser } from '@backend/common/types';
 import { getMeApi, loginApi, registerApi } from '@/api/auth.api';
 import i18n, { DB_LANG_MAP } from '@/features/i18n';
-
-const TOKEN_KEY = 'transcendence';
-
-export const getToken = () => localStorage.getItem(TOKEN_KEY);
-
-interface AuthContextValue {
-  user: SafeUser | null;
-  loading: boolean;
-  login: (identifier: string, password: string) => Promise<void>;
-  register: (username: string, password: string) => Promise<void>;
-  logout: () => void;
-  loginWithToken: (token: string) => Promise<void>;
-  refreshUser: () => Promise<void>;
-}
-
-export const AuthContext = createContext<AuthContextValue | null>(null);
+import { AuthContext, TOKEN_KEY } from './authCtx';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SafeUser | null>(null);

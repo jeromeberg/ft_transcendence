@@ -1,13 +1,7 @@
-import { createContext, useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { io, type Socket } from 'socket.io-client';
-import { useAuth } from '@/features/auth';
-import { getToken } from '@/features/auth/AuthContext';
-
-interface ChatCtxValue {
-  chatSocket: Socket | null;
-}
-
-export const ChatCtx = createContext<ChatCtxValue | null>(null);
+import { useAuth, getToken } from '@/features/auth';
+import { ChatCtx } from './chatContext';
 
 export function ChatProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();

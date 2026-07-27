@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getToken } from '@/features/auth/AuthContext';
+import { getToken } from '@/features/auth';
 import type { Lang } from '@/features/i18n';
 import { SUPPORTED } from '@/features/i18n';
 

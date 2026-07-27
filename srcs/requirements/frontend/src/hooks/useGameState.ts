@@ -45,7 +45,7 @@ export function useGameState(
   const timedOut = !practice && !finished && (localTimeout || forcedEnd);
   const raceOver = forcedEnd || localTimeout;
   const timeLeft = timedOut ? 0 : Math.max(0, maxTime - elapsed);
-  const liveMinutes = startedAt.current != null ? (Date.now() - startedAt.current) / 60000 : 0;
+  const liveMinutes = elapsed / 60;
   const wpm = lockedWpm ?? (liveMinutes > 0 ? Math.round(totalCorrect / 5 / liveMinutes) : 0);
   const accuracy =
     totalTyped > 0 ? Math.min(100, Math.round((completedChars / totalTyped) * 100)) : 0;

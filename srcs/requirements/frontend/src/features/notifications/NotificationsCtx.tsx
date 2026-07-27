@@ -1,20 +1,9 @@
-import { createContext, useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { io, type Socket } from 'socket.io-client';
 import { useAuth, getToken } from '@/features/auth';
 import { notificationsApi } from '@/api/notifications.api';
 import type { NotificationItemDto } from '@/types/api';
-
-interface NotificationsCtxValue {
-  items: NotificationItemDto[];
-  unreadCount: number;
-  nextCursor: number | null;
-  loading: boolean;
-  markRead: (ids: number[]) => Promise<void>;
-  markAllRead: () => Promise<void>;
-  loadMore: () => Promise<void>;
-}
-
-export const NotificationsCtx = createContext<NotificationsCtxValue | null>(null);
+import { NotificationsCtx } from './notificationsContext';
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
