@@ -30,9 +30,9 @@ export class UsersService {
         return passwordHash;
     }
 
-    async create(username: string, email: string, password?: string) {
+    async create(username: string, email: string | undefined, password?: string) {
         const exists = await this.prisma.user.findFirst({
-            where: { OR: [{ email }, { username }] },
+            where: email ? { OR: [{ email }, { username }] } : { username },
         });
         if (exists) throw new ConflictException('USER_ALREADY_EXISTS');
 

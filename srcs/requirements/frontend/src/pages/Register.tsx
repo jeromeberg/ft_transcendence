@@ -12,20 +12,12 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit({
-    username,
-    email,
-    password,
-  }: {
-    username?: string;
-    email?: string;
-    password: string;
-  }) {
-    if (!username || !email) return;
+  async function handleSubmit({ username, password }: { username?: string; password: string }) {
+    if (!username) return;
     setError('');
     setLoading(true);
     try {
-      await register(username, email, password);
+      await register(username, password);
       navigate('/profile');
     } catch (e) {
       setError(e instanceof Error ? tError(e.message, t) : t('errors.register_failed'));

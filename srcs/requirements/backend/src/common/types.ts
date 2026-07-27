@@ -4,7 +4,7 @@ export type UserRole = 'USER' | 'MOD';
 export type SafeUser = {
     id: number;
     username: string;
-    email: string;
+    email: string | null;
     role: UserRole;
     avatarUrl: string | null;
     language: string;

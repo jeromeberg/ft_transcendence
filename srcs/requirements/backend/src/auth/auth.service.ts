@@ -14,7 +14,7 @@ export class AuthService {
         private prisma: PrismaService,
     ) {}
 
-    async register(username: string, email: string, password: string) {
+    async register(username: string, email: string | undefined, password: string) {
         return this.usersService.create(username, email, password);
     }
 

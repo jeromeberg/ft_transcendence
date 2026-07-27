@@ -70,7 +70,7 @@ enum NotificationSourceType {
 model User {
     id                  Int                 @id @default(autoincrement())
     username            String              @unique
-    email               String              @unique
+    email               String?             @unique
     role                Role                @default(USER)
     passwordHash        String?
     avatarUrl           String?

@@ -19,15 +19,11 @@ export async function loginApi(
   return handleResponse(res);
 }
 
-export async function registerApi(
-  username: string,
-  email: string,
-  password: string,
-): Promise<SafeUser> {
+export async function registerApi(username: string, password: string): Promise<SafeUser> {
   const res = await fetch(API_AUTH_REGISTER, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, email, password }),
+    body: JSON.stringify({ username, password }),
   });
   return handleResponse(res);
 }
