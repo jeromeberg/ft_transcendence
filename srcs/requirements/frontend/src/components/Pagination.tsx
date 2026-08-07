@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
-import { Btn } from "@/components";
+import { useTranslation } from 'react-i18next';
+import { Btn } from '@/components';
 
-function buildPageRange(current: number, total: number, delta: number): (number | "...")[] {
+function buildPageRange(current: number, total: number, delta: number): (number | '...')[] {
   if (total <= 1) return [1];
 
   const range: number[] = [];
@@ -9,10 +9,10 @@ function buildPageRange(current: number, total: number, delta: number): (number 
     range.push(i);
   }
 
-  const items: (number | "...")[] = [1];
-  if (range[0] > 2) items.push("...");
+  const items: (number | '...')[] = [1];
+  if (range[0] > 2) items.push('...');
   items.push(...range);
-  if (range[range.length - 1] < total - 1) items.push("...");
+  if (range[range.length - 1] < total - 1) items.push('...');
 
   items.push(total);
   return items;
@@ -29,7 +29,7 @@ export function Pagination({
   currentPage,
   totalPages,
   onPageChange,
-  className = "",
+  className = '',
 }: PaginationProps) {
   const { t } = useTranslation('common');
   const canGoPrev = currentPage > 1;
@@ -37,9 +37,7 @@ export function Pagination({
   const delta = totalPages <= 7 ? totalPages : 1;
 
   return (
-    <div
-      className={["flex items-center justify-center gap-1", className].join(" ")}
-    >
+    <div className={['flex items-center justify-center gap-1', className].join(' ')}>
       <Btn
         variant="secondary"
         size="sm"
@@ -47,23 +45,28 @@ export function Pagination({
         disabled={!canGoPrev}
         aria-label={t('pagination.prev')}
         className="w-8 px-0"
-      > {"◀"} </Btn>
+      >
+        {' '}
+        {'◀'}{' '}
+      </Btn>
 
       <div className="flex gap-1">
         {buildPageRange(currentPage, totalPages, delta).map((page, i) =>
-          page === "..." ? (
-            <span key={`ellipsis-${i}`} className="flex items-center px-1 text-sm select-none">…</span>
+          page === '...' ? (
+            <span key={`ellipsis-${i}`} className="flex items-center px-1 text-sm select-none">
+              …
+            </span>
           ) : (
             <Btn
               key={page}
-              variant={currentPage === page ? "primary" : "ghost"}
+              variant={currentPage === page ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => onPageChange(page)}
-              className={`w-8 px-0${currentPage === page ? " pointer-events-none" : ""}`}
+              className={`w-8 px-0${currentPage === page ? ' pointer-events-none' : ''}`}
             >
               {page}
             </Btn>
-          )
+          ),
         )}
       </div>
 
@@ -74,7 +77,10 @@ export function Pagination({
         disabled={!canGoNext}
         aria-label={t('pagination.next')}
         className="w-8 px-0"
-      > {"▶"} </Btn>
+      >
+        {' '}
+        {'▶'}{' '}
+      </Btn>
     </div>
   );
 }

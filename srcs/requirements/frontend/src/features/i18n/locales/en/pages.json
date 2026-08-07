@@ -127,11 +127,7 @@
     "timed_out": "Time's up!",
     "hud_time": "Time",
     "hud_wpm": "WPM",
-    "ordinals": [
-      "1st",
-      "2nd",
-      "3rd"
-    ],
+    "ordinals": ["1st", "2nd", "3rd"],
     "you": "You",
     "player": "Player {{n}}",
     "type_here": "Type here...",

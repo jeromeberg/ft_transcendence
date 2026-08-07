@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 
-type FetchFn<T> = (query: string, page: number) => Promise<{
+type FetchFn<T> = (
+  query: string,
+  page: number,
+) => Promise<{
   data: T[];
   totalPages: number;
 }>;

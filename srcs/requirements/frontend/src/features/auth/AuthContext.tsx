@@ -1,29 +1,8 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react';
-import type { SafeUser } from "@backend/common/types";
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import type { SafeUser } from '@backend/common/types';
 import { getMeApi, loginApi, registerApi } from '@/api/auth.api';
 import i18n, { DB_LANG_MAP } from '@/features/i18n';
-
-const TOKEN_KEY = 'transcendence';
-
-export const getToken = () => localStorage.getItem(TOKEN_KEY);
-
-interface AuthContextValue {
-  user: SafeUser | null;
-  loading: boolean;
-  login: (identifier: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
-  loginWithToken: (token: string) => Promise<void>;
-  refreshUser: () => Promise<void>;
-}
-
-export const AuthContext = createContext<AuthContextValue | null>(null);
+import { AuthContext, TOKEN_KEY } from './authCtx';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SafeUser | null>(null);
@@ -32,8 +11,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function applyUser(u: SafeUser) {
     setUser(u);
     const lang = DB_LANG_MAP[u.language];
-    if (lang)
-      i18n.changeLanguage(lang);
+    if (lang) i18n.changeLanguage(lang);
   }
 
   useEffect(() => {
@@ -56,9 +34,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const register = useCallback(
-    async (username: string, email: string, password: string) => {
-      await registerApi(username, email, password);
-      await login(email, password);
+    async (username: string, password: string) => {
+      await registerApi(username, password);
+      await login(username, password);
     },
     [login],
   );
@@ -69,9 +47,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const loginWithToken = useCallback(async (token: string) => {
-      localStorage.setItem(TOKEN_KEY, token);
-      const me = await getMeApi(token);
-      setUser(me);
+    localStorage.setItem(TOKEN_KEY, token);
+    const me = await getMeApi(token);
+    setUser(me);
   }, []);
 
   const refreshUser = useCallback(async () => {
@@ -82,7 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, loginWithToken, refreshUser }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, logout, loginWithToken, refreshUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -50,12 +50,27 @@ enum Role {
     MOD
 }
 
+enum NotificationType {
+    CHAT_MESSAGE
+    FRIEND_REQUEST
+    FRIEND_ACCEPTED
+    LOBBY_INVITE
+    SYSTEM
+}
+
+enum NotificationSourceType {
+    MESSAGE
+    FRIENDSHIP
+    INVITE
+    SYSTEM
+}
+
 //models
 
 model User {
     id                  Int                 @id @default(autoincrement())
     username            String              @unique
-    email               String              @unique
+    email               String?             @unique
     role                Role                @default(USER)
     passwordHash        String?
     avatarUrl           String?
@@ -72,6 +87,8 @@ model User {
     matchResult         MatchResult[]
     userAchievement     UserAchievement[]
     createdQuotes       Quote[]
+    receivedNotifications Notification[]      @relation("NotificationRecipient")
+    actedNotifications  Notification[]        @relation("NotificationActor")
 }
 
 model OAuthAccount {
@@ -165,4 +182,26 @@ model Quote {
     type                String?
     createdAt           DateTime?           @default(now())
     matches             Match[]
+}
+
+model Notification {
+    id                  Int                   @id @default(autoincrement())
+    recipientId         Int
+    recipient           User                  @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+    actorId             Int?
+    actor               User?                 @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+    type                NotificationType
+    sourceType          NotificationSourceType?
+    sourceId            Int?
+    title               String?
+    content             String?
+    payload             Json?
+    createdAt           DateTime              @default(now())
+    readAt              DateTime?
+    archivedAt          DateTime?
+
+    @@index([recipientId, createdAt(sort: Desc)])
+    @@index([recipientId, readAt])
+    @@index([recipientId, type, createdAt(sort: Desc)])
+    @@unique([recipientId, type, sourceType, sourceId], map: "notification_dedupe")
 }

@@ -1,5 +1,5 @@
-import { API_FRIENDS, authHeaders, handleResponse } from "@/api/config.api";
-import type { FriendUserDto, FriendRequestDto, RelationshipResponseDto } from "@/types/api";
+import { API_FRIENDS, authHeaders, handleResponse } from '@/api/config.api';
+import type { FriendUserDto, FriendRequestDto, RelationshipResponseDto } from '@/types/api';
 
 export type { FriendUserDto, FriendRequestDto, RelationshipResponseDto };
 
@@ -12,32 +12,32 @@ export async function getFriends(username: string): Promise<FriendUserDto[]> {
 
 export async function sendFriendRequest(username: string): Promise<void> {
   const res = await fetch(`${API_FRIENDS}/request`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders() },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ username }),
   });
   return handleResponse<void>(res);
 }
 
 export async function acceptFriendRequest(username: string): Promise<void> {
-  const res = await fetch(
-    `${API_FRIENDS}/request/${encodeURIComponent(username)}/accept`,
-    { method: "PATCH", headers: authHeaders() },
-  );
+  const res = await fetch(`${API_FRIENDS}/request/${encodeURIComponent(username)}/accept`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+  });
   return handleResponse<void>(res);
 }
 
 export async function declineFriendRequest(username: string): Promise<void> {
-  const res = await fetch(
-    `${API_FRIENDS}/request/${encodeURIComponent(username)}/decline`,
-    { method: "PATCH", headers: authHeaders() },
-  );
+  const res = await fetch(`${API_FRIENDS}/request/${encodeURIComponent(username)}/decline`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+  });
   return handleResponse<void>(res);
 }
 
 export async function deleteFriend(username: string): Promise<void> {
   const res = await fetch(`${API_FRIENDS}/${encodeURIComponent(username)}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: authHeaders(),
   });
   return handleResponse<void>(res);

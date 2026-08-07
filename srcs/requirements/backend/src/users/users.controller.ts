@@ -9,19 +9,20 @@ import {
     Body,
     BadRequestException,
     UseInterceptors,
-    UploadedFile
+    UploadedFile,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { UpdateProfileDto, UpdateSettingsDto } from './dto'
+import { UpdateProfileDto, UpdateSettingsDto } from './dto';
+import { MAX_SIZE_BYTES } from '../cloudinary/cloudinary.service';
 
 //API LIMIT
 import { Throttle } from '@nestjs/throttler';
 import {
     THROTTLE_LIMIT_AUTH_GLOBAL,
     THROTTLE_LIMIT_UP_AVATAR,
-    THROTTLE_LIMIT_SETTINGS
+    THROTTLE_LIMIT_SETTINGS,
 } from '../common/throttle.constants';
 
 //AUTH
@@ -34,8 +35,21 @@ import { SafeUser } from '../common/types';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 //SWAGGER
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiConsumes, ApiBody } from '@nestjs/swagger';
-import { UserProfileDto, AvatarResponseDto, UserStatsDto, UserSearchDto } from '../common/dto/users-response.dto';
+import {
+    ApiTags,
+    ApiOperation,
+    ApiResponse,
+    ApiBearerAuth,
+    ApiQuery,
+    ApiConsumes,
+    ApiBody,
+} from '@nestjs/swagger';
+import {
+    UserProfileDto,
+    AvatarResponseDto,
+    UserStatsDto,
+    UserSearchDto,
+} from '../common/dto/users-response.dto';
 import { PaginatedResponse } from '../common/dto/paginated-response.dto';
 
 const MAX_PROFILES_REQUEST = 70;
@@ -64,8 +78,8 @@ export class UsersController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Patch('me')
-    updateProfile(@Body() dto:UpdateProfileDto, @CurrentUser() user: SafeUser){
-        return this.UsersService.updateProfile(user.username, dto)
+    updateProfile(@Body() dto: UpdateProfileDto, @CurrentUser() user: SafeUser) {
+        return this.UsersService.updateProfile(user.username, dto);
     }
 
     @ApiBearerAuth()
@@ -75,8 +89,8 @@ export class UsersController {
     @Throttle({ default: THROTTLE_LIMIT_SETTINGS })
     @UseGuards(JwtAuthGuard)
     @Patch('me/settings')
-    updateSettings(@Body() dto:UpdateSettingsDto, @CurrentUser() user: SafeUser){
-        return this.UsersService.updateSettings(user.username, dto)
+    updateSettings(@Body() dto: UpdateSettingsDto, @CurrentUser() user: SafeUser) {
+        return this.UsersService.updateSettings(user.username, dto);
     }
 
     @ApiOperation({ summary: 'Search users by username (paginated)' })
@@ -91,8 +105,7 @@ export class UsersController {
         @Query('page') page = '1',
         @Query('limit') limit = '10',
     ): Promise<PaginatedResponse<UserSearchDto>> {
-        if (!q?.trim())
-            throw new BadRequestException('MISSING_SEARCH_QUERY');
+        if (!q?.trim()) throw new BadRequestException('MISSING_SEARCH_QUERY');
         return this.UsersService.searchUsers(q.trim(), Number(page), Number(limit));
     }
 
@@ -119,16 +132,60 @@ export class UsersController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @Get()
     getProfiles(@Query('users') users: string) {
-        if (!users)
-            throw new BadRequestException('MISSING_USERS_PARAM');
-        const usernameList = users.split(',').map(s => s.trim()).filter(Boolean).slice(0, MAX_PROFILES_REQUEST);
+        if (!users) throw new BadRequestException('MISSING_USERS_PARAM');
+        const usernameList = users
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .slice(0, MAX_PROFILES_REQUEST);
         return this.UsersService.getProfiles(usernameList);
     }
 
     @ApiOperation({ summary: 'Get match history' })
     @ApiQuery({ name: 'page', required: false, example: 1 })
     @ApiQuery({ name: 'limit', required: false, example: 20 })
-    @ApiResponse({ status: 200, schema: { example: { data: [{ wpm: 85, position: 1, accuracy: 96.5, nbPlayers: 3, nbBots: 1, finishedAt: '2026-01-01T00:00:00.000Z', match: { id: 1, startedAt: '2026-01-01T00:00:00.000Z', quote: { id: 10, text: 'The quick brown fox' }, matchResult: [{ position: 1, wpm: 85, kind: 'user', displayName: 'johndoe', avatarUrl: null, user: { id: 1, username: 'johndoe', avatarUrl: null } }, { position: 2, wpm: 60, kind: 'bot', displayName: 'Bot 3', avatarUrl: null, user: null }] } }], total: 1, totalPages: 1 } } })
+    @ApiResponse({
+        status: 200,
+        schema: {
+            example: {
+                data: [
+                    {
+                        wpm: 85,
+                        position: 1,
+                        accuracy: 96.5,
+                        nbPlayers: 3,
+                        nbBots: 1,
+                        finishedAt: '2026-01-01T00:00:00.000Z',
+                        match: {
+                            id: 1,
+                            startedAt: '2026-01-01T00:00:00.000Z',
+                            quote: { id: 10, text: 'The quick brown fox' },
+                            matchResult: [
+                                {
+                                    position: 1,
+                                    wpm: 85,
+                                    kind: 'user',
+                                    displayName: 'johndoe',
+                                    avatarUrl: null,
+                                    user: { id: 1, username: 'johndoe', avatarUrl: null },
+                                },
+                                {
+                                    position: 2,
+                                    wpm: 60,
+                                    kind: 'bot',
+                                    displayName: 'Bot 3',
+                                    avatarUrl: null,
+                                    user: null,
+                                },
+                            ],
+                        },
+                    },
+                ],
+                total: 1,
+                totalPages: 1,
+            },
+        },
+    })
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @Get(':username/history')
     getHistory(
@@ -142,11 +199,18 @@ export class UsersController {
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Upload avatar' })
     @ApiConsumes('multipart/form-data')
-    @ApiBody({ schema: { type: 'object', properties: { avatar: { type: 'string', format: 'binary' } } } })
+    @ApiBody({
+        schema: { type: 'object', properties: { avatar: { type: 'string', format: 'binary' } } },
+    })
     @ApiResponse({ status: 201, type: AvatarResponseDto })
     @Throttle({ default: THROTTLE_LIMIT_UP_AVATAR })
     @UseGuards(JwtAuthGuard)
-    @UseInterceptors(FileInterceptor('avatar', { storage: memoryStorage() }))
+    @UseInterceptors(
+        FileInterceptor('avatar', {
+            storage: memoryStorage(),
+            limits: { fileSize: MAX_SIZE_BYTES },
+        }),
+    )
     @Post('me/avatar')
     async uploadAvatar(@UploadedFile() file: Express.Multer.File, @CurrentUser() user: SafeUser) {
         const url = await this.CloudinaryService.uploadAvatar(file, user.avatarUrl ?? undefined);

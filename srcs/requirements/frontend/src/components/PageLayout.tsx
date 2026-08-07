@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 /*
 to limit width:
@@ -12,16 +12,13 @@ interface PageLayoutProps {
 }
 
 export default function PageLayout({ children, maxWidth, centerY = false }: PageLayoutProps) {
-  const layoutClassName = [
-    "flex flex-col gap-6 p-6",
-    centerY ? "flex-1 justify-center" : "",
-  ].join(" ").trim();
+  const layoutClassName = ['flex flex-col gap-6 p-6', centerY ? 'flex-1 justify-center' : '']
+    .join(' ')
+    .trim();
 
   return (
     <div className={layoutClassName}>
-      <div className={`mx-auto w-full ${maxWidth ?? ""}`}>
-        {children}
-      </div>
+      <div className={`mx-auto w-full ${maxWidth ?? ''}`}>{children}</div>
     </div>
   );
 }

@@ -9,17 +9,20 @@ interface MessagesProps {
   currentUserId?: number;
 }
 
-function formatDayLabel(dateStr: string, tToday: string, tYesterday: string, locale: string): string {
+function formatDayLabel(
+  dateStr: string,
+  tToday: string,
+  tYesterday: string,
+  locale: string,
+): string {
   const date = new Date(dateStr);
   const now = new Date();
   const yesterday = new Date(now);
 
   yesterday.setDate(now.getDate() - 1);
 
-  if (date.toDateString() === now.toDateString())
-    return tToday;
-  if (date.toDateString() === yesterday.toDateString())
-    return tYesterday;
+  if (date.toDateString() === now.toDateString()) return tToday;
+  if (date.toDateString() === yesterday.toDateString()) return tYesterday;
   return date.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
@@ -33,8 +36,6 @@ export function Messages({ messages, currentUserId }: MessagesProps) {
     }
   }, [messages]);
 
-  let lastDay = '';
-
   return (
     <div ref={containerRef} className="min-h-0 flex-1 overflow-y-auto p-4">
       {messages.length === 0 ? (
@@ -45,18 +46,28 @@ export function Messages({ messages, currentUserId }: MessagesProps) {
         <>
           {messages.map((msg, idx) => {
             const day = new Date(msg.sentAt).toDateString();
-            const showSeparator = day !== lastDay;
-            lastDay = day;
+            const prevDay = idx > 0 ? new Date(messages[idx - 1].sentAt).toDateString() : null;
+            const showSeparator = day !== prevDay;
             return (
               <div key={msg.id ?? idx}>
                 {showSeparator && (
                   <div className="flex items-center gap-3 my-4">
                     <div className="flex-1 border-t border-dim" />
-                    <Text size="xs" variant="muted">{formatDayLabel(msg.sentAt, t('chat.today'), t('chat.yesterday'), i18n.language)}</Text>
+                    <Text size="xs" variant="muted">
+                      {formatDayLabel(
+                        msg.sentAt,
+                        t('chat.today'),
+                        t('chat.yesterday'),
+                        i18n.language,
+                      )}
+                    </Text>
                     <div className="flex-1 border-t border-dim" />
                   </div>
                 )}
-                <Message message={msg} isOwn={currentUserId !== undefined && msg.senderId === currentUserId} />
+                <Message
+                  message={msg}
+                  isOwn={currentUserId !== undefined && msg.senderId === currentUserId}
+                />
               </div>
             );
           })}

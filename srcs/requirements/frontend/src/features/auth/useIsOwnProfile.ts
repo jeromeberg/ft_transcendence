@@ -1,4 +1,4 @@
-import { useAuth } from "./useAuth";
+import { useAuth } from './useAuth';
 
 export function useIsOwnProfile(username?: string | null): boolean {
   const { user } = useAuth();

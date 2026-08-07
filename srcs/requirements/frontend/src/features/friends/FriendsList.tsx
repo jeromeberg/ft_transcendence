@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Avatar, Btn, Heading, Input, List, Pagination, Status, Text } from "@/components";
-import { useTranslation } from "react-i18next";
-import { tError } from "@/features/i18n";
-import { useIsOwnProfile } from "@/features/auth";
-import { getFriends } from "@/api/friends.api";
-import { useStatus } from "@/hooks/useStatus";
-import type { Friend } from "./types";
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Avatar, Btn, Heading, Input, List, Pagination, Status, Text } from '@/components';
+import { useTranslation } from 'react-i18next';
+import { tError } from '@/features/i18n';
+import { useIsOwnProfile } from '@/features/auth';
+import { getFriends } from '@/api/friends.api';
+import { useStatus } from '@/hooks/useStatus';
+import type { Friend } from './types';
 
 const PAGE_SIZE = 20;
 
@@ -24,12 +24,12 @@ interface FriendsListProps {
 export default function FriendsList({
   username,
   limit,
-  className = "",
+  className = '',
   refreshKey,
   showMsgBtn,
   showRequestsBtn,
   showSearchBar,
-  onMsgClick
+  onMsgClick,
 }: FriendsListProps) {
   const { t } = useTranslation('pages');
   const isOwnProfile = useIsOwnProfile(username);
@@ -70,11 +70,15 @@ export default function FriendsList({
         setLoading(false);
       });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [getStatus, isOwnProfile, refreshKey, username]);
 
   // Reset page when query changes
-  useEffect(() => { setPage(1); }, [query]);
+  useEffect(() => {
+    setPage(1);
+  }, [query]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -112,9 +116,13 @@ export default function FriendsList({
       )}
 
       {loading ? (
-        <Text className="mt-6" variant="muted">{t('common:loading')}</Text>
+        <Text className="mt-6" variant="muted">
+          {t('common:loading')}
+        </Text>
       ) : error ? (
-        <Text className="mt-6" variant="error">{error}</Text>
+        <Text className="mt-6" variant="error">
+          {error}
+        </Text>
       ) : paginated.length === 0 ? (
         <Text className="mt-6" variant="muted">
           {query.trim() ? t('friends.search_empty') : t('friends.no_friends')}
@@ -135,7 +143,13 @@ export default function FriendsList({
                 </Text>
               </Link>
               {showMsgBtn && (
-                <Btn as={Link} to={`/chat/${item.username}`} variant="ghost" size="sm" onClick={onMsgClick}>
+                <Btn
+                  as={Link}
+                  to={`/chat/${item.username}`}
+                  variant="ghost"
+                  size="sm"
+                  onClick={onMsgClick}
+                >
                   {t('common:message')}
                 </Btn>
               )}

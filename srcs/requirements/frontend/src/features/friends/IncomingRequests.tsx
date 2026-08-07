@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { tError } from "@/features/i18n";
-import { Avatar, Btn, Heading, List, Text } from "@/components";
-import { getIncomingRequests, acceptFriendRequest, declineFriendRequest } from "@/api/friends.api";
-import type { Friend } from "./types";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { tError } from '@/features/i18n';
+import { Avatar, Btn, Heading, List, Text } from '@/components';
+import { getIncomingRequests, acceptFriendRequest, declineFriendRequest } from '@/api/friends.api';
+import type { Friend } from './types';
 
 interface IncomingRequestsProps {
   className?: string;
   refreshKey?: number;
 }
 
-export default function IncomingRequests({ className = "", refreshKey }: IncomingRequestsProps) {
+export default function IncomingRequests({ className = '', refreshKey }: IncomingRequestsProps) {
   const { t } = useTranslation('pages');
   const [requests, setRequests] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,33 +21,52 @@ export default function IncomingRequests({ className = "", refreshKey }: Incomin
     setLoading(true);
     getIncomingRequests()
       .then((data) =>
-        setRequests(data.map((item) => ({ id: item.id, username: item.username, avatarSrc: item.avatarUrl, status: "OFFLINE" as const })))
+        setRequests(
+          data.map((item) => ({
+            id: item.id,
+            username: item.username,
+            avatarSrc: item.avatarUrl,
+            status: 'OFFLINE' as const,
+          })),
+        ),
       )
-      .catch((err: unknown) => setError(err instanceof Error ? tError(err.message, t) : t('friends.error_requests')))
+      .catch((err: unknown) =>
+        setError(err instanceof Error ? tError(err.message, t) : t('friends.error_requests')),
+      )
       .finally(() => setLoading(false));
   }, [refreshKey]);
 
   function handleAccept(username: string) {
     acceptFriendRequest(username)
       .then(() => setRequests((prev) => prev.filter((r) => r.username !== username)))
-      .catch((err: unknown) => setError(err instanceof Error ? tError(err.message, t) : t('friends.error_accept')));
+      .catch((err: unknown) =>
+        setError(err instanceof Error ? tError(err.message, t) : t('friends.error_accept')),
+      );
   }
 
   function handleDecline(username: string) {
     declineFriendRequest(username)
       .then(() => setRequests((prev) => prev.filter((r) => r.username !== username)))
-      .catch((err: unknown) => setError(err instanceof Error ? tError(err.message, t) : t('friends.error_decline')));
+      .catch((err: unknown) =>
+        setError(err instanceof Error ? tError(err.message, t) : t('friends.error_decline')),
+      );
   }
 
   return (
     <section className={className}>
       <Heading level={4}>{t('friends.incoming_heading', { count: requests.length })}</Heading>
       {loading ? (
-        <Text className="mt-4" variant="muted">{t('common:loading')}</Text>
+        <Text className="mt-4" variant="muted">
+          {t('common:loading')}
+        </Text>
       ) : error ? (
-        <Text className="mt-4" variant="error">{error}</Text>
+        <Text className="mt-4" variant="error">
+          {error}
+        </Text>
       ) : requests.length === 0 ? (
-        <Text className="mt-4" variant="muted">{t('friends.no_incoming')}</Text>
+        <Text className="mt-4" variant="muted">
+          {t('friends.no_incoming')}
+        </Text>
       ) : (
         <List
           className="mt-4"
@@ -62,8 +81,12 @@ export default function IncomingRequests({ className = "", refreshKey }: Incomin
                 <Text className="truncate">{item.username}</Text>
               </Link>
               <div className="flex items-center gap-1">
-                <Btn size="sm" variant="danger" onClick={() => handleDecline(item.username)}>{t('friends.decline')}</Btn>
-                <Btn size="sm" onClick={() => handleAccept(item.username)}>{t('friends.accept')}</Btn>
+                <Btn size="sm" variant="danger" onClick={() => handleDecline(item.username)}>
+                  {t('friends.decline')}
+                </Btn>
+                <Btn size="sm" onClick={() => handleAccept(item.username)}>
+                  {t('friends.accept')}
+                </Btn>
               </div>
             </div>
           )}

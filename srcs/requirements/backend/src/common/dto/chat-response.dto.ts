@@ -3,7 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 class ChatUserDto {
     @ApiProperty({ example: 1 }) id: number;
     @ApiProperty({ example: 'johndoe' }) username: string;
-    @ApiProperty({ example: 'https://cloudinary.com/avatar.jpg', nullable: true }) avatarUrl: string | null;
+    @ApiProperty({ example: 'https://cloudinary.com/avatar.jpg', nullable: true }) avatarUrl:
+        string | null;
 }
 
 export class MessageDto {

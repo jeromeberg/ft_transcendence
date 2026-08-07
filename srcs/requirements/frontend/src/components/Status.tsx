@@ -9,9 +9,9 @@ interface StatusProps {
 
 export function Status({ status, hoverText }: StatusProps) {
   const colors: Record<string, string> = {
-    ONLINE: "bg-green-500",
-    IN_GAME: "bg-yellow-500",
-    OFFLINE: "bg-gray-500",
+    ONLINE: 'bg-green-500',
+    IN_GAME: 'bg-yellow-500',
+    OFFLINE: 'bg-gray-500',
   };
 
   return (

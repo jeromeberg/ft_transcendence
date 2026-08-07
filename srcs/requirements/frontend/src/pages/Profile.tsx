@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Alert, PageLayout, PageWithSidebar, Sidebar } from "@/components";
-import { tError } from "@/features/i18n";
-import { useAuth, useIsOwnProfile } from "@/features/auth";
-import { getUserProfile, type UserProfile } from "@/api/users.api";
-import { FriendsList } from "@/features/friends";
-import { Bio, Stats, NextLvl, History, Achievements, ProfileHeader } from "@/features/profile";
-import { useStatus } from "@/hooks/useStatus";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Alert, PageLayout, PageWithSidebar, Sidebar } from '@/components';
+import { tError } from '@/features/i18n';
+import { useAuth, useIsOwnProfile } from '@/features/auth';
+import { getUserProfile, type UserProfile } from '@/api/users.api';
+import { FriendsList } from '@/features/friends';
+import { Bio, Stats, NextLvl, History, Achievements, ProfileHeader } from '@/features/profile';
+import { useStatus } from '@/hooks/useStatus';
 
 export default function Profile() {
   const { t } = useTranslation('pages');
@@ -56,7 +56,7 @@ export default function Profile() {
   }
 
   const createdAt = profile.createdAt
-    ? new Date(profile.createdAt).toLocaleDateString("fr-CA")
+    ? new Date(profile.createdAt).toLocaleDateString('fr-CA')
     : null;
 
   const displayedStatus = getStatus(profile.status, profile.id, profile.username);
@@ -65,18 +65,24 @@ export default function Profile() {
     <PageWithSidebar
       centerContent
       sidebar={
-        <Sidebar variant={"terminal"}>
-          <FriendsList username={targetUsername} className="h-full" refreshKey={friendsRefreshKey} showRequestsBtn />
+        <Sidebar variant={'terminal'}>
+          <FriendsList
+            username={targetUsername}
+            className="h-full"
+            refreshKey={friendsRefreshKey}
+            showRequestsBtn
+          />
         </Sidebar>
       }
       maxWidth="max-w-2xl"
     >
       <div className="flex flex-col gap-6">
-
         <ProfileHeader
           profile={profile}
           isOwnProfile={isOwnProfile}
-          onAvatarChange={(url) => setProfile((prev) => prev ? { ...prev, avatarUrl: url } : prev)}
+          onAvatarChange={(url) =>
+            setProfile((prev) => (prev ? { ...prev, avatarUrl: url } : prev))
+          }
           displayedStatus={displayedStatus}
           createdAt={createdAt}
           onFriendRemoved={() => setFriendsRefreshKey((prev) => prev + 1)}
@@ -85,18 +91,17 @@ export default function Profile() {
         <Bio
           bio={profile.bio ?? null}
           isOwnProfile={isOwnProfile}
-          onBioChange={(bio) => setProfile((prev) => prev ? { ...prev, bio } : prev)}
-          containerVariant={"panel"}
+          onBioChange={(bio) => setProfile((prev) => (prev ? { ...prev, bio } : prev))}
+          containerVariant={'panel'}
         />
 
-        <Stats stats={profile.stats} containerVariant={"terminal"}/>
+        <Stats stats={profile.stats} containerVariant={'terminal'} />
 
-        <NextLvl stats={profile.stats} containerVariant={"terminal"} />
+        <NextLvl stats={profile.stats} containerVariant={'terminal'} />
 
-        <Achievements achievements={profile.achievements} containerVariant={"terminal"}/>
+        <Achievements achievements={profile.achievements} containerVariant={'terminal'} />
 
-        <History username={targetUsername} containerVariant={"terminal"}/>
-
+        <History username={targetUsername} containerVariant={'terminal'} />
       </div>
     </PageWithSidebar>
   );

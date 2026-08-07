@@ -1,7 +1,7 @@
-import { Container, ProgressBar } from "@/components";
-import type { UserStats } from "@/api/users.api";
-import type { ContainerVariant } from "@/components/Container";
-import { useTranslation } from "react-i18next";
+import { Container, ProgressBar } from '@/components';
+import type { UserStats } from '@/api/users.api';
+import type { ContainerVariant } from '@/components/Container';
+import { useTranslation } from 'react-i18next';
 
 interface NextLvlProps {
   stats: UserStats;
@@ -24,7 +24,7 @@ export default function NextLvl({ stats, containerVariant }: NextLvlProps) {
   );
 
   return (
-    <Container variant={containerVariant ?? "default"} label="NEXT LEVEL">
+    <Container variant={containerVariant ?? 'default'} label="NEXT LEVEL">
       <div className="flex flex-col gap-2">
         <ProgressBar
           value={playedSinceCurrentLevel}

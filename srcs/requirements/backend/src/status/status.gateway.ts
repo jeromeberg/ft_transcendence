@@ -8,11 +8,10 @@ import { Socket, Server } from 'socket.io';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';
 import { UserStatus } from '@prisma/client';
-import { WS_CORS } from '../common/ws.config'
+import { WS_CORS } from '../common/ws.config';
 
 @WebSocketGateway({ cors: WS_CORS, namespace: '/status' })
 export class StatusGateway implements OnGatewayConnection, OnGatewayDisconnect {
-
     @WebSocketServer() server: Server;
 
     private connectionCount = new Map<number, number>();
@@ -28,8 +27,7 @@ export class StatusGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     async handleConnection(client: Socket) {
         const ok = await this.authService.validateWsClient(client);
-        if (!ok)
-            return client.disconnect();
+        if (!ok) return client.disconnect();
         const userId = client.data.user.id;
         client.data.userId = userId;
 
@@ -37,7 +35,6 @@ export class StatusGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.connectionCount.set(userId, count);
 
         if (count === 1) {
-
             const current = await this.prisma.user.findUnique({
                 where: { id: userId },
                 select: { status: true },
@@ -54,8 +51,7 @@ export class StatusGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     async handleDisconnect(client: Socket) {
         const userId = client.data.userId;
-        if(!userId)
-            return;
+        if (!userId) return;
 
         const count = (this.connectionCount.get(userId) ?? 1) - 1;
 

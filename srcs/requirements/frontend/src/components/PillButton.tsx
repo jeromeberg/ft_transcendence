@@ -8,13 +8,13 @@ interface PillButtonProps {
 
 const COLORS = {
   red: {
-    main:    'rgb(213, 46, 46)',
-    bg:      'rgba(213, 46, 46, 0.36)',
+    main: 'rgb(213, 46, 46)',
+    bg: 'rgba(213, 46, 46, 0.36)',
     pattern: 'rgba(213, 46, 46, 0.073)',
   },
   blue: {
-    main:    'rgb(46, 115, 213)',
-    bg:      'rgba(46, 115, 213, 0.36)',
+    main: 'rgb(46, 115, 213)',
+    bg: 'rgba(46, 115, 213, 0.36)',
     pattern: 'rgba(46, 115, 213, 0.073)',
   },
 };

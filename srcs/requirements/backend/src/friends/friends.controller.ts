@@ -10,8 +10,19 @@ import {
     HttpCode,
 } from '@nestjs/common';
 import { FriendsService } from './friends.service';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiExcludeEndpoint } from '@nestjs/swagger';
-import { FriendUserDto, FriendRequestDto, RelationshipResponseDto, FriendMessageResponseDto } from '../common/dto/friends-response.dto';
+import {
+    ApiTags,
+    ApiOperation,
+    ApiResponse,
+    ApiBearerAuth,
+    ApiExcludeEndpoint,
+} from '@nestjs/swagger';
+import {
+    FriendUserDto,
+    FriendRequestDto,
+    RelationshipResponseDto,
+    FriendMessageResponseDto,
+} from '../common/dto/friends-response.dto';
 
 //API LIMIT
 import { Throttle } from '@nestjs/throttler';
@@ -21,25 +32,23 @@ import { THROTTLE_LIMIT_AUTH_GLOBAL } from '../common/throttle.constants';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 //DTO
-import { CreateFriendRequestDto } from './dto'
+import { CreateFriendRequestDto } from './dto';
 
 import { CurrentUser } from '../common/current-user.decorator';
-import { SafeUser } from '../common/types'
+import { SafeUser } from '../common/types';
 
 @ApiTags('friends')
 @ApiBearerAuth()
 @Controller('friends')
 export class FriendsController {
-    constructor(
-        private FriendsService: FriendsService,
-    ) {}
+    constructor(private FriendsService: FriendsService) {}
 
     @ApiOperation({ summary: 'Get my friends list' })
     @ApiResponse({ status: 200, type: [FriendUserDto] })
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Get('/')
-    getMyFriends(@CurrentUser() user:SafeUser) {
+    getMyFriends(@CurrentUser() user: SafeUser) {
         return this.FriendsService.getMyFriends(user);
     }
 
@@ -48,7 +57,7 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Get('/requests')
-    getFriendRequests(@CurrentUser() user:SafeUser) {
+    getFriendRequests(@CurrentUser() user: SafeUser) {
         return this.FriendsService.getFriendRequests(user);
     }
 
@@ -57,7 +66,7 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Get('/requests/sent')
-    getFriendRequestsSent(@CurrentUser() user:SafeUser) {
+    getFriendRequestsSent(@CurrentUser() user: SafeUser) {
         return this.FriendsService.getFriendRequestsSent(user);
     }
 
@@ -65,7 +74,7 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Get('/blocked')
-    getBlocked(@CurrentUser() user:SafeUser) {
+    getBlocked(@CurrentUser() user: SafeUser) {
         return this.FriendsService.getBlocked(user);
     }
 
@@ -74,11 +83,11 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Get(':username/relationship')
-    getFriendRelationship(@Param('username') username: string, @CurrentUser() user:SafeUser) {
+    getFriendRelationship(@Param('username') username: string, @CurrentUser() user: SafeUser) {
         return this.FriendsService.getFriendRelationship(user, username);
     }
 
-    @ApiOperation({ summary: "Get friends list by username" })
+    @ApiOperation({ summary: 'Get friends list by username' })
     @ApiResponse({ status: 200, type: [FriendUserDto] })
     @ApiResponse({ status: 404, description: 'USER_NOT_FOUND' })
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
@@ -88,13 +97,16 @@ export class FriendsController {
     }
 
     @ApiOperation({ summary: 'Send a friend request' })
-    @ApiResponse({ status: 200, schema: { example: { initiatorId: 1, receiverId: 2, status: 'PENDING' } } })
+    @ApiResponse({
+        status: 200,
+        schema: { example: { initiatorId: 1, receiverId: 2, status: 'PENDING' } },
+    })
     @ApiResponse({ status: 409, description: 'REQUEST_ALREADY_SENT | ALREADY_FRIENDS | BLOCKED' })
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Post('request')
     @HttpCode(200)
-    friendRequest(@Body() dto: CreateFriendRequestDto, @CurrentUser() user:SafeUser) {
+    friendRequest(@Body() dto: CreateFriendRequestDto, @CurrentUser() user: SafeUser) {
         return this.FriendsService.friendRequest(user, dto);
     }
 
@@ -105,7 +117,7 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Patch('request/:username/accept')
-    friendAccept(@Param('username') username: string, @CurrentUser() user:SafeUser) {
+    friendAccept(@Param('username') username: string, @CurrentUser() user: SafeUser) {
         return this.FriendsService.friendAccept(user, username);
     }
 
@@ -116,7 +128,7 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Patch('request/:username/decline')
-    friendDecline(@Param('username') username: string, @CurrentUser() user:SafeUser) {
+    friendDecline(@Param('username') username: string, @CurrentUser() user: SafeUser) {
         return this.FriendsService.friendDecline(user, username);
     }
 
@@ -126,7 +138,7 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Delete(':username')
-    deleteFriend(@Param('username') username: string, @CurrentUser() user:SafeUser) {
+    deleteFriend(@Param('username') username: string, @CurrentUser() user: SafeUser) {
         return this.FriendsService.deleteFriend(user, username);
     }
 
@@ -135,7 +147,7 @@ export class FriendsController {
     @UseGuards(JwtAuthGuard)
     @HttpCode(200)
     @Post(':username/block')
-    friendBlock(@Param('username') username: string, @CurrentUser() user:SafeUser) {
+    friendBlock(@Param('username') username: string, @CurrentUser() user: SafeUser) {
         return this.FriendsService.friendBlock(user, username);
     }
 
@@ -143,7 +155,7 @@ export class FriendsController {
     @Throttle({ default: THROTTLE_LIMIT_AUTH_GLOBAL })
     @UseGuards(JwtAuthGuard)
     @Delete(':username/unblock')
-    friendUnblock(@Param('username') username: string, @CurrentUser() user:SafeUser) {
+    friendUnblock(@Param('username') username: string, @CurrentUser() user: SafeUser) {
         return this.FriendsService.friendUnblock(user, username);
     }
 }

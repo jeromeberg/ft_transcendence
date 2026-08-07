@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from "react";
+import { type HTMLAttributes } from 'react';
 
 /*
 
@@ -18,32 +18,21 @@ interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
 }
 
 const headingClasses: Record<HeadingLevel, string> = {
-  1: "text-3xl tracking-[0.3em] uppercase",
-  2: "text-2xl tracking-[0.2em] uppercase",
-  3: "text-lg  tracking-[0.15em] uppercase",
-  4: "text-base tracking-widest uppercase",
-  5: "text-sm tracking-widest uppercase"
+  1: 'text-3xl tracking-[0.3em] uppercase',
+  2: 'text-2xl tracking-[0.2em] uppercase',
+  3: 'text-lg  tracking-[0.15em] uppercase',
+  4: 'text-base tracking-widest uppercase',
+  5: 'text-sm tracking-widest uppercase',
 };
 
-export function Heading({
-  level = 1,
-  className = "",
-  children,
-  ...props
-}: HeadingProps) {
-  const Tag = `h${level}` as "h1" | "h2" | "h3" | "h4" | "h5";
+export function Heading({ level = 1, className = '', children, ...props }: HeadingProps) {
+  const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
   return (
     <Tag
-      className={[
-        "font-mono font-bold text-default",
-        headingClasses[level],
-        className,
-      ].join(" ")}
+      className={['font-mono font-bold text-default', headingClasses[level], className].join(' ')}
       {...props}
     >
       {children}
     </Tag>
   );
 }
-
-

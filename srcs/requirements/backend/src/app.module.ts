@@ -13,29 +13,29 @@ import { StatusModule } from './status/status.module';
 import { ChatModule } from './chat/chat.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { QuoteModule } from './quote/quote.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
-  imports: [
-    ThrottlerModule.forRoot([
-      { name: 'default', ...THROTTLE_LIMIT_AUTH_GLOBAL },
-    ]),
-    PrismaModule,
-    AuthModule,
-    UsersModule,
-    LeaderBoardModule,
-    GameModule,
-    FriendsModule,
-    StatusModule,
-    ChatModule,
-    AchievementModule,
-    QuoteModule
-  ],
-  controllers: [AsyncApiController],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
+    imports: [
+        ThrottlerModule.forRoot([{ name: 'default', ...THROTTLE_LIMIT_AUTH_GLOBAL }]),
+        PrismaModule,
+        AuthModule,
+        UsersModule,
+        LeaderBoardModule,
+        GameModule,
+        FriendsModule,
+        StatusModule,
+        ChatModule,
+        AchievementModule,
+        QuoteModule,
+        NotificationsModule,
+    ],
+    controllers: [AsyncApiController],
+    providers: [
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+        },
+    ],
 })
 export class AppModule {}

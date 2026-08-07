@@ -1,1 +1,1 @@
-export { SendMessageDto } from './chat-send-message.dto'
+export { SendMessageDto } from './chat-send-message.dto';

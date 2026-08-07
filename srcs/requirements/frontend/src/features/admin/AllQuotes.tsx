@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextArea, Btn, Input, List, Text } from "@/components";
+import { TextArea, Btn, Input, List, Text } from '@/components';
 import { deleteQuote, editQuote } from '@/api/quote.api';
 import type { Quote } from '@/types/api';
 
@@ -59,9 +59,15 @@ export function AllQuotes({ quotes, loading, onQuotesUpdated, onError }: AllQuot
         <div className="space-y-3">
           <div className="flex justify-between items-center gap-2">
             <div>
-              {quote.type && <Text variant="dim" size="xs">{quote.type}</Text>}
+              {quote.type && (
+                <Text variant="dim" size="xs">
+                  {quote.type}
+                </Text>
+              )}
             </div>
-            <Text variant="dim" size="xs">{quote.creator?.username || 'Seed'}</Text>
+            <Text variant="dim" size="xs">
+              {quote.creator?.username || 'Seed'}
+            </Text>
           </div>
 
           {editing?.id === quote.id ? (
@@ -88,22 +94,38 @@ export function AllQuotes({ quotes, loading, onQuotesUpdated, onError }: AllQuot
           <div className="flex gap-2 pt-2">
             {editing?.id === quote.id ? (
               <>
-                <Btn variant="primary" size="sm" disabled={processing === quote.id} onClick={() => handleEditSave(quote.id)}>
+                <Btn
+                  variant="primary"
+                  size="sm"
+                  disabled={processing === quote.id}
+                  onClick={() => handleEditSave(quote.id)}
+                >
                   {processing === quote.id ? 'Saving...' : 'Save'}
                 </Btn>
-                <Btn variant="secondary" size="sm" disabled={processing === quote.id} onClick={() => setEditing(null)}>
+                <Btn
+                  variant="secondary"
+                  size="sm"
+                  disabled={processing === quote.id}
+                  onClick={() => setEditing(null)}
+                >
                   Cancel
                 </Btn>
               </>
             ) : (
               <>
-                <Btn variant="secondary" size="sm" onClick={() => setEditing({ id: quote.id, text: quote.text, type: quote.type || '' })}>
+                <Btn
+                  variant="secondary"
+                  size="sm"
+                  onClick={() =>
+                    setEditing({ id: quote.id, text: quote.text, type: quote.type || '' })
+                  }
+                >
                   Edit
                 </Btn>
-                <Btn 
+                <Btn
                   variant="danger"
-                  size="sm" 
-                  disabled={processing === quote.id} 
+                  size="sm"
+                  disabled={processing === quote.id}
                   onClick={() => handleDelete(quote.id)}
                 >
                   {processing === quote.id ? 'Deleting...' : 'Delete'}

@@ -34,7 +34,10 @@ export default function ChatPage() {
       centerContent
       sidebarFull={!selectedChat}
     >
-      <ChatBox targetUsername={selectedChat} onMessageSent={() => setChatsRefreshKey((k) => k + 1)} />
+      <ChatBox
+        targetUsername={selectedChat}
+        onMessageSent={() => setChatsRefreshKey((k) => k + 1)}
+      />
     </PageWithSidebar>
   );
 }

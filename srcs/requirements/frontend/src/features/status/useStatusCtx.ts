@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { StatusCtx } from '.';
+import { StatusCtx } from './statusContext';
 
 export function useStatusCtx() {
   const ctx = useContext(StatusCtx);

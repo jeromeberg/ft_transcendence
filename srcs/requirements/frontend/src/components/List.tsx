@@ -1,4 +1,4 @@
-import Container, { type ContainerVariant } from "./Container";
+import Container, { type ContainerVariant } from './Container';
 
 interface ListItem {
   id: string | number;
@@ -16,17 +16,20 @@ interface ListProps<T extends ListItem> {
 export function List<T extends ListItem>({
   items,
   renderItem,
-  className = "",
+  className = '',
   containerVariant,
   getItemClassName,
 }: ListProps<T>) {
   return (
-    <ul className={["flex flex-col gap-3", className].join(" ")}>
+    <ul className={['flex flex-col gap-3', className].join(' ')}>
       {items.map((item, index) => (
         <li key={item.id}>
           <Container
             variant={containerVariant}
-            className={["transition-colors duration-150 hover:border-default", getItemClassName?.(item, index) ?? ""].join(" ")}
+            className={[
+              'transition-colors duration-150 hover:border-default',
+              getItemClassName?.(item, index) ?? '',
+            ].join(' ')}
           >
             {renderItem(item, index)}
           </Container>

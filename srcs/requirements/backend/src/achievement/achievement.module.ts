@@ -4,8 +4,8 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [PrismaModule, forwardRef(() => UsersModule)],
-  providers: [AchievementService],
-  exports: [AchievementService],
+    imports: [PrismaModule, forwardRef(() => UsersModule)],
+    providers: [AchievementService],
+    exports: [AchievementService],
 })
 export class AchievementModule {}

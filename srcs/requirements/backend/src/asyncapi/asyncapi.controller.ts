@@ -1,13 +1,12 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { readFile, readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join } from 'path';
 
 @Controller('asyncapi')
 export class AsyncApiController {
-
     @Get('yaml')
-    getYaml(@Res() res: Response){
+    getYaml(@Res() res: Response) {
         const yaml = readFileSync(join(process.cwd(), 'asyncapi/asyncapi.yaml'), 'utf8');
         res.setHeader('Content-Type', 'text/yaml');
         res.send(yaml);

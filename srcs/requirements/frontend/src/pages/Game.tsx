@@ -1,45 +1,44 @@
-import { useState, useEffect, useMemo } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Btn, PageLayout, Alert, Modal } from "@/components";
-import { useTouchDevice } from "@/hooks/useTouchDevice";
-import { GameArena } from "@/features/game";
-import { RaceRewardsModal } from "@/features/game";
-import { useRaceSocket } from "@/hooks/useRaceSocket";
-import { useAuth } from "@/features/auth";
-import { LOBBY_COUNTDOWN_MS } from "@backend/common/game.constant";
+import { useState, useEffect, useMemo } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Btn, PageLayout, Alert, Modal } from '@/components';
+import { useTouchDevice } from '@/hooks/useTouchDevice';
+import { GameArena } from '@/features/game';
+import { RaceRewardsModal } from '@/features/game';
+import { useRaceSocket } from '@/hooks/useRaceSocket';
+import { useAuth } from '@/features/auth';
+import { LOBBY_COUNTDOWN_MS } from '@backend/common/game.constant';
 
-type Mode = "practice" | "multiplayer";
-type PracticePhase = "countdown" | "go" | "racing";
+type Mode = 'practice' | 'multiplayer';
+type PracticePhase = 'countdown' | 'go' | 'racing';
 
 export default function Game() {
   const { t } = useTranslation('pages');
   const navigate = useNavigate();
   const location = useLocation();
   const { mode: modeParam } = useParams<{ mode: string }>();
-  const mode: Mode = modeParam === "practice" ? "practice" : "multiplayer";
+  const mode: Mode = modeParam === 'practice' ? 'practice' : 'multiplayer';
   const [gameKey, setGameKey] = useState(0);
   const isTouch = useTouchDevice();
 
-  const [pPhase, setPPhase] = useState<PracticePhase>("racing");
+  const [pPhase, setPPhase] = useState<PracticePhase>('racing');
   const [pCountdown, setPCountdown] = useState(5);
 
   const { user } = useAuth();
   const race = useRaceSocket();
 
   useEffect(() => {
-    if (mode !== "multiplayer" || user !== null)
-      return;
+    if (mode !== 'multiplayer' || user !== null) return;
     race.leaveQueue();
-    navigate("/");
+    navigate('/');
   }, [user, mode]);
 
   useEffect(() => {
-    if (mode !== "multiplayer") {
+    if (mode !== 'multiplayer') {
       return;
     }
     if (!(location.state as { fromApp?: boolean } | null)?.fromApp) {
-      navigate("/");
+      navigate('/');
       return;
     }
     navigate(location.pathname, { replace: true });
@@ -49,33 +48,30 @@ export default function Game() {
   }, [mode, race.joinQueue, isTouch]);
 
   useEffect(() => {
-    if (mode !== "practice") return;
-    if (pPhase === "countdown") {
+    if (mode !== 'practice') return;
+    if (pPhase === 'countdown') {
       if (pCountdown === 1) {
-        const time = setTimeout(() => setPPhase("go"), 1000);
+        const time = setTimeout(() => setPPhase('go'), 1000);
         return () => clearTimeout(time);
       }
       const time = setTimeout(() => setPCountdown((c) => c - 1), 1000);
       return () => clearTimeout(time);
     }
-    if (pPhase === "go") {
-      const time = setTimeout(() => setPPhase("racing"), 700);
+    if (pPhase === 'go') {
+      const time = setTimeout(() => setPPhase('racing'), 700);
       return () => clearTimeout(time);
     }
   }, [mode, pPhase, pCountdown]);
 
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    if (race.phase !== "countdown" || race.countdownEndsAt == null) return;
+    if (race.phase !== 'countdown' || race.countdownEndsAt == null) return;
     setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 200);
     return () => clearInterval(id);
   }, [race.phase, race.countdownEndsAt]);
 
-  const racerList = useMemo(
-    () => Object.values(race.racers),
-    [race.racers],
-  );
+  const racerList = useMemo(() => Object.values(race.racers), [race.racers]);
 
   if (isTouch) {
     return (
@@ -86,25 +82,26 @@ export default function Game() {
   }
 
   const backToMenu = () => {
-    if (mode === "multiplayer") race.leaveQueue();
+    if (mode === 'multiplayer') race.leaveQueue();
     navigate('/');
   };
 
-  if (mode === "practice") {
-    const overlay =
-      pPhase === "countdown" ? String(pCountdown) :
-      pPhase === "go"        ? "GO!"              :
-      null;
+  if (mode === 'practice') {
+    const overlay = pPhase === 'countdown' ? String(pCountdown) : pPhase === 'go' ? 'GO!' : null;
 
     const replay = () => {
       setGameKey((k) => k + 1);
-      setPPhase("racing");
+      setPPhase('racing');
     };
 
     return (
       <div className="w-full flex flex-col items-center gap-3">
         <div className="w-full max-w-3xl px-2 sm:px-4 flex justify-start" style={{ zoom: 1.25 }}>
-          <Btn size="sm" variant="terminal" onClick={backToMenu}>{`[ ${t('play.main_menu')} ]`}</Btn>
+          <Btn
+            size="sm"
+            variant="terminal"
+            onClick={backToMenu}
+          >{`[ ${t('play.main_menu')} ]`}</Btn>
         </div>
         <GameArena key={gameKey} overlay={overlay} onReplay={replay} practice />
       </div>
@@ -112,7 +109,10 @@ export default function Game() {
   }
 
   const topBar = (label: string, onClick: () => void, scaled = false) => (
-    <div className="w-full max-w-3xl px-2 sm:px-4 flex justify-start" style={scaled ? { zoom: 1.25 } : undefined}>
+    <div
+      className="w-full max-w-3xl px-2 sm:px-4 flex justify-start"
+      style={scaled ? { zoom: 1.25 } : undefined}
+    >
       <Btn size="sm" variant="terminal" onClick={onClick}>{`[ ${label} ]`}</Btn>
     </div>
   );
@@ -123,7 +123,7 @@ export default function Game() {
         {topBar(t('play.main_menu'), backToMenu)}
         <div className="w-full max-w-3xl px-2 sm:px-4">
           <Alert variant="error">
-            {race.rejected === "duplicate_session"
+            {race.rejected === 'duplicate_session'
               ? t('play.already_in_game')
               : t('play.join_failed')}
           </Alert>
@@ -139,7 +139,12 @@ export default function Game() {
         <div className="w-full max-w-3xl px-2 sm:px-4 flex flex-col gap-4">
           <Alert variant="error">{t('play.disconnected')}</Alert>
           <div className="flex justify-center">
-            <Btn onClick={() => { setGameKey((k) => k + 1); race.joinQueue(); }}>
+            <Btn
+              onClick={() => {
+                setGameKey((k) => k + 1);
+                race.joinQueue();
+              }}
+            >
               {t('play.race_again')}
             </Btn>
           </div>
@@ -148,7 +153,7 @@ export default function Game() {
     );
   }
 
-  if (race.phase === "idle" || race.matchText == null) {
+  if (race.phase === 'idle' || race.matchText == null) {
     return (
       <div className="w-full flex flex-col items-center gap-3">
         <PageLayout centerY>
@@ -159,7 +164,7 @@ export default function Game() {
   }
 
   const secondsLeft =
-    race.phase === "countdown" && race.countdownEndsAt != null
+    race.phase === 'countdown' && race.countdownEndsAt != null
       ? Math.min(
           Math.ceil(LOBBY_COUNTDOWN_MS / 1000),
           Math.max(0, Math.ceil((race.countdownEndsAt - now) / 1000)),
@@ -167,11 +172,13 @@ export default function Game() {
       : null;
 
   const status =
-    race.phase === "waiting"   ? t('play.waiting_for_players') :
-    race.phase === "countdown" ? t('play.starting_in', { n: secondsLeft ?? 0 }) :
-    null;
+    race.phase === 'waiting'
+      ? t('play.waiting_for_players')
+      : race.phase === 'countdown'
+        ? t('play.starting_in', { n: secondsLeft ?? 0 })
+        : null;
 
-  const preRace = race.phase === "waiting" || race.phase === "countdown";
+  const preRace = race.phase === 'waiting' || race.phase === 'countdown';
   const replay = () => {
     setGameKey((k) => k + 1);
     race.joinQueue();
@@ -179,14 +186,12 @@ export default function Game() {
 
   return (
     <div className="w-full flex flex-col items-center gap-3">
-      {race.rewards && (
-        <RaceRewardsModal rewards={race.rewards} onClose={race.clearRewards} />
-      )}
+      {race.rewards && <RaceRewardsModal rewards={race.rewards} onClose={race.clearRewards} />}
       {topBar(preRace ? t('play.cancel') : t('play.main_menu'), backToMenu, true)}
       <GameArena
         key={gameKey}
         multiplayer
-        started={race.phase === "racing"}
+        started={race.phase === 'racing'}
         status={status}
         serverText={race.matchText}
         racers={racerList}

@@ -1,4 +1,4 @@
-import { type HTMLAttributes, useState } from "react";
+import { type HTMLAttributes, useState } from 'react';
 
 /*
 
@@ -13,8 +13,7 @@ Examples:
 
 */
 
-
-export type AlertVariant = "info" | "success" | "warning" | "error";
+export type AlertVariant = 'info' | 'success' | 'warning' | 'error';
 
 interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
@@ -25,33 +24,29 @@ interface AlertProps extends HTMLAttributes<HTMLDivElement> {
 
 const config: Record<AlertVariant, { tag: string; classes: string }> = {
   info: {
-    tag: "INFO",
-    classes:
-      "border-dim text-default bg-muted",
+    tag: 'INFO',
+    classes: 'border-dim text-default bg-muted',
   },
   success: {
-    tag: "OK",
-    classes:
-      "border-default text-default bg-muted",
+    tag: 'OK',
+    classes: 'border-default text-default bg-muted',
   },
   warning: {
-    tag: "WARN",
-    classes:
-      "border-accent text-accent bg-black",
+    tag: 'WARN',
+    classes: 'border-accent text-accent bg-black',
   },
   error: {
-    tag: "ERR",
-    classes:
-      "border-danger text-danger bg-[#1a0000]",
+    tag: 'ERR',
+    classes: 'border-danger text-danger bg-[#1a0000]',
   },
 };
 
 export default function Alert({
-  variant = "info",
+  variant = 'info',
   tag,
   hidable = false,
   onHide,
-  className = "",
+  className = '',
   children,
   ...props
 }: AlertProps) {
@@ -71,10 +66,10 @@ export default function Alert({
     <div
       role="alert"
       className={[
-        "flex items-start gap-3 border px-4 py-3 font-mono text-sm",
+        'flex items-start gap-3 border px-4 py-3 font-mono text-sm',
         classes,
         className,
-      ].join(" ")}
+      ].join(' ')}
       {...props}
     >
       <span className="shrink-0 font-bold tracking-widest uppercase opacity-80">[{label}]</span>

@@ -8,7 +8,12 @@ export function AdminRoute({ children }: { children: ReactNode }) {
 
   if (loading) return null;
   if (!user) return <Navigate to="/signin" replace />;
-  if (user.role !== 'MOD') return <PageLayout><Alert variant="error">Not allowed for users</Alert></PageLayout>;
+  if (user.role !== 'MOD')
+    return (
+      <PageLayout>
+        <Alert variant="error">Not allowed for users</Alert>
+      </PageLayout>
+    );
 
   return <>{children}</>;
 }

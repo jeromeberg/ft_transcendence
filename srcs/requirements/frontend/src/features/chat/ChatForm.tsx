@@ -14,8 +14,7 @@ export function ChatForm({ onSendMessage }: ChatFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || throttled)
-      return;
+    if (!message.trim() || throttled) return;
 
     setThrottled(true);
     onSendMessage(message);
@@ -33,7 +32,9 @@ export function ChatForm({ onSendMessage }: ChatFormProps) {
         variant="ghost"
         className="flex-1"
       />
-      <Btn type="submit" variant="primary" disabled={throttled}>{throttled ? '⏳' : t('chat.send')}</Btn>
+      <Btn type="submit" variant="primary" disabled={throttled}>
+        {throttled ? '⏳' : t('chat.send')}
+      </Btn>
     </form>
   );
 }

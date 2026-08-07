@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextArea, Btn, Input, Text } from "@/components";
+import { TextArea, Btn, Input, Text } from '@/components';
 import { createQuote } from '@/api/quote.api';
 
 interface NewQuoteFormProps {
@@ -43,7 +43,7 @@ export function NewQuoteForm({ onQuoteCreated, onError, error }: NewQuoteFormPro
         rows={4}
         className="mb-4"
       />
-      
+
       <Input
         label="Type (Optional)"
         placeholder="code"
@@ -54,11 +54,7 @@ export function NewQuoteForm({ onQuoteCreated, onError, error }: NewQuoteFormPro
 
       {error && <Text variant="error">{error}</Text>}
 
-      <Btn 
-        variant="primary" 
-        type="submit" 
-        disabled={submitting}
-      >
+      <Btn variant="primary" type="submit" disabled={submitting}>
         {submitting ? 'Creating...' : 'Add Quote'}
       </Btn>
     </form>
