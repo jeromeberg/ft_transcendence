@@ -1,6 +1,6 @@
 # Colors
 
-![palette](colors.png)
+![palette](assets/colors.png)
 
 | Name    | Hex       |
 | ------- | --------- |

@@ -1,24 +1,28 @@
-# Reusable Components
+# Components
+
+The components below are exported from `@/components`.
 
 ### Btn
-- Props:
-  - `as?`
-  - `variant?`: `primary | secondary | ghost | danger`
-  - `size?`: `sm | md | lg`
-  - `className?`
-  - Native element props
-- Example:
+
+- `as?`: React element type; defaults to `button`
+- `variant?`: `primary | secondary | ghost | danger | terminal`; defaults to `primary`
+- `size?`: `sm | md | lg`; defaults to `md`
+- `className?`
+- Props from the element selected with `as`
+
 ```tsx
-<Btn variant="primary" size="md">Click me</Btn>
+<Btn variant="primary" size="md">
+  Click me
+</Btn>
 ```
 
 ### Container
-- Props:
-  - `variant?`: `default | panel | terminal`
-  - `label?`
-  - `className?`
-  - Native div props
-- Example:
+
+- `variant?`: `default | panel | terminal`; defaults to `default`
+- `label?`
+- `className?`
+- Native div props
+
 ```tsx
 <Container variant="panel" label="Info">
   <Text>Content here</Text>
@@ -26,91 +30,97 @@
 ```
 
 ### Input
-- Props:
-  - `variant?`: `default | ghost`
-  - `label?`
-  - `error?`
-  - `className?`
-  - Native input props
-- Example:
+
+- `variant?`: `default | ghost`; defaults to `default`
+- `label?`
+- `error?`
+- `className?`: applied to the input wrapper
+- Native input props
+- Supports a forwarded ref to the native input.
+
 ```tsx
 <Input label="Username" placeholder="Enter username" />
 ```
 
 ### Alert
-- Props:
-  - `variant?`: `info | success | warning | error`
-  - `tag?`
-  - `hidable?`
-  - `onHide?`
-  - `className?`
-  - Native div props
-- Example:
+
+- `variant?`: `info | success | warning | error`; defaults to `info`
+- `tag?`: overrides the default status tag
+- `hidable?`: shows a close button when `true`
+- `onHide?`: called after the alert is hidden
+- `className?`
+- Native div props
+
 ```tsx
-<Alert variant="success">Operation successful!</Alert>
+<Alert variant="success" hidable>
+  Operation successful!
+</Alert>
 ```
 
 ### Heading
-- Props:
-  - `level?`: `1 | 2 | 3 | 4 | 5`
-  - `className?`
-  - Native heading props
-- Example:
+
+- `level?`: `1 | 2 | 3 | 4 | 5`; defaults to `1`
+- `className?`
+- Native heading props
+
 ```tsx
-<Heading level={1}>Main Title</Heading>
+<Heading level={1}>Main title</Heading>
 ```
 
 ### Text
-- Props:
-  - `variant?`: `default | dim | muted | accent | error | prompt`
-  - `size?`: `xs | sm | base`
-  - `as?`
-  - `className?`
-  - Native element props
-- Example:
+
+- `variant?`: `default | dim | muted | accent | error | prompt`; defaults to `default`
+- `size?`: `xs | sm | base`; defaults to `sm`
+- `as?`: `p | span | label | li`; defaults to `p`
+- `className?`
+- Native HTML props
+
 ```tsx
-<Text variant="default" size="sm">Some text</Text>
+<Text as="span" variant="dim" size="sm">
+  Some text
+</Text>
 ```
 
 ### Label
-- Props:
-  - `htmlFor?`
-  - `className?`
-  - Native span/label props
-- Example:
+
+- `htmlFor?`
+- `className?`
+- Native HTML props
+
 ```tsx
-<Label htmlFor="field">Field Label</Label>
+<Label htmlFor="field">Field label</Label>
 ```
 
 ### AuthForm
-- Props:
-  - `mode?`: `login | register`
-  - `error?`
-  - `loading?`
-  - `onSubmit?`
-- Example:
+
+- `mode?`: `login | register`; defaults to `login`
+- `error?`
+- `loading?`; defaults to `false`
+- `onSubmit?`: receives `{ identifier?, username?, password }`
+
 ```tsx
 <AuthForm mode="login" onSubmit={(data) => handleAuth(data)} />
 ```
 
 ### List
-- Props:
-  - `items`
-  - `renderItem`
-  - `className?`
-  - `containerVariant?`
-  - `getItemClassName?`
-- Example:
+
+- Each item must have an `id: string | number`.
+- `items`
+- `renderItem`: receives the item and its index
+- `className?`
+- `containerVariant?`: `default | panel | terminal`
+- `getItemClassName?`: receives the item and its index
+
 ```tsx
 <List items={users} renderItem={(user) => <div>{user.name}</div>} />
 ```
 
 ### StatCard
-- Props:
-  - `label?`
-  - `children`
-  - `variant?`
-- Example:
+
+- `label?`
+- `children`
+- `variant?`: `default | panel | terminal | null`; `null` uses `default`
+
 ```tsx
 <StatCard label="Statistics">
   <StatItem label="Rank" value="#42" accent />
@@ -120,124 +130,143 @@
 ```
 
 ### StatItem
-- Props:
-  - `label`
-  - `value`
-  - `accent?`
-- Example:
+
+- `label`
+- `value`: `string | number`
+- `accent?`; defaults to `false`
+
 ```tsx
-<StatItem label="Wins" value="42" />
+<StatItem label="Wins" value={42} />
+```
+
+### StatDivider
+
+```tsx
+<StatDivider />
 ```
 
 ### Avatar
-- Props:
-  - `username`
-  - `src?`
-  - `size?`: `sm | md | lg | xl`
-  - `className?`
-- Example:
+
+- `username`
+- `src?`: `string | null`
+- `size?`: `sm | md | lg | xl`; defaults to `md`
+- `className?`
+- Displays the first letter of `username` when `src` is absent.
+
 ```tsx
 <Avatar username="john" size="md" />
 ```
 
 ### TextArea
-- Props:
-  - `variant?`: `default | ghost`
-  - `label?`
-  - `error?`
-  - `className?`
-  - `rows?`
-  - Native textarea props
-- Example:
+
+- `variant?`: `default | ghost`; defaults to `default`
+- `label?`
+- `error?`
+- `className?`: applied to the native textarea
+- `rows?`; defaults to `4`
+- Native textarea props
+- Supports a forwarded ref to the native textarea.
+
 ```tsx
 <TextArea label="Message" placeholder="Type here" rows={4} />
 ```
 
 ### Pagination
-- Props:
-  - `currentPage`
-  - `totalPages`
-  - `onPageChange`
-  - `className?`
-  - Native div props
-- Example:
+
+- `currentPage`
+- `totalPages`
+- `onPageChange`: receives the selected page number
+- `className?`
+
 ```tsx
-<Pagination currentPage={1} totalPages={5} onPageChange={(page) => setPage(page)} />
+<Pagination
+  currentPage={1}
+  totalPages={5}
+  onPageChange={(page) => setPage(page)}
+/>
 ```
 
 ### Status
-- Props:
-  - `status`: `ONLINE | IN_GAME | OFFLINE`
-  - `hoverText?`
-- Example:
+
+- `status`: string; `ONLINE`, `IN_GAME`, and `OFFLINE` have defined colors, and other values use the offline color
+- `hoverText?`: rendered as the native `title`
+
 ```tsx
 <Status status="ONLINE" hoverText="User is online" />
 ```
 
 ### LanguageSwitcher
-- Props:
-  - `variant?`: `navbar | settings`
-- Example:
+
+- `variant?`: `navbar | settings`; defaults to `navbar`
+
 ```tsx
 <LanguageSwitcher variant="navbar" />
 ```
 
 ### Modal
-- Props:
-  - `isOpen`
-  - `onClose`
-  - `title?`
-  - `className?`
-  - Native div props
-- Example:
+
+- `isOpen`
+- `onClose`
+- `title?`
+- `className?`: applied to the dialog panel
+- `children`
+- Closes on a backdrop click or the Escape key.
+
 ```tsx
 <Modal isOpen={open} onClose={() => setOpen(false)} title="Confirm">
   <Text>Are you sure?</Text>
 </Modal>
 ```
 
-### FindUser
-- Props:
-  - `onAction`
-  - `className?`
-- Example:
+### SearchList
+
+- Each result must have an `id: string | number`.
+- `fetchFn`: receives the query and page, then returns `{ data, totalPages }`
+- `renderItem`
+- `placeholder?`
+- `emptyMessage?`
+- `debounceMs?`; defaults to `300`
+- `className?`
+- `excludeUsername?`: filters results whose `username` matches this value
+
 ```tsx
-<FindUser onAction={(username) => addFriend(username)} />
+<SearchList
+  fetchFn={searchUsers}
+  renderItem={(user) => <span>{user.username}</span>}
+  excludeUsername={currentUsername}
+/>
 ```
 
 ### ProgressBar
-- Props:
-  - `value`
-  - `label?`
-  - `max?`
-  - `color?`: `accent | dim | default | darkgreen | error | muted`
-- Example:
+
+- `value`
+- `label?`
+- `max?`; defaults to `100`
+- `color?`: `accent | dim | default | darkgreen | error | muted`
+- Only `accent` selects the accent style. All other accepted values use the default style.
+
 ```tsx
-<ProgressBar value={75} max={100} label="Progress" />
+<ProgressBar value={75} max={100} label="Progress" color="accent" />
 ```
 
 ### Footer
-- Props:
-  - none
-- Example:
+
 ```tsx
 <Footer />
 ```
 
 ### Navbar
-- Props:
-  - none
-- Example:
+
 ```tsx
 <Navbar />
 ```
 
 ### PageLayout
-- Props:
-  - `children`
-  - `maxWidth?`
-  - `centerY?`
-- Example:
+
+- `children`
+- `maxWidth?`: a CSS utility class such as `max-w-md`
+- `centerY?`; defaults to `false`
+
 ```tsx
 <PageLayout maxWidth="max-w-md" centerY>
   <Heading level={1}>Title</Heading>
@@ -245,14 +274,14 @@
 ```
 
 ### PageWithSidebar
-- Props:
-  - `children`
-  - `sidebar`
-  - `maxWidth?`
-  - `fillHeight?`
-  - `sidebarFull?`
-  - `centerContent?`
-- Example:
+
+- `children`
+- `sidebar`
+- `maxWidth?`: a CSS utility class
+- `fillHeight?`
+- `sidebarFull?`: changes sidebar scrolling when `fillHeight` is enabled
+- `centerContent?`: balances the sidebar with an empty column on extra-large screens
+
 ```tsx
 <PageWithSidebar sidebar={<Sidebar>Menu</Sidebar>}>
   <div>Main content</div>
@@ -260,10 +289,10 @@
 ```
 
 ### Sidebar
-- Props:
-  - `children`
-  - `variant?`: `default | panel | terminal | null`
-- Example:
+
+- `children`
+- `variant?`: `default | panel | terminal | null`; `null` uses `default`
+
 ```tsx
 <Sidebar variant="default">
   <Text>Sidebar content</Text>
