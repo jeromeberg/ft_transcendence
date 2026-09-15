@@ -1,4 +1,4 @@
-const { io } = require('../srcs/requirements/frontend/node_modules/socket.io-client')
+const { io } = require('../frontend/node_modules/socket.io-client')
 
 const API    = 'http://localhost:3000'
 const WS_URL = `${API}/game`

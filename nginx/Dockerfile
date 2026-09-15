@@ -1,6 +1,6 @@
-FROM nginx:alpine
+FROM nginx:1.31.5-alpine3.24
 
-RUN apk update && apk upgrade && apk add --no-cache openssl bash
+RUN apk add --no-cache openssl
 
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY tools/generate_ssl.sh /docker-entrypoint.sh

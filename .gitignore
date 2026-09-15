@@ -2,8 +2,6 @@
 .env
 .env.local
 .env.*.local
-srcs/.env
-srcs/.env.local
 
 # Dependencies
 node_modules/

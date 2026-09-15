@@ -1,17 +1,17 @@
 NAME		= Typerun
-COMPOSE		= srcs/docker-compose.yml
-COMPOSE_DEV	= srcs/docker-compose.dev.yml
-COMPOSE_CLOUD	= srcs/docker-compose.cloud.yml
-DOMAIN		:= $(shell grep '^DOMAIN=' srcs/.env 2>/dev/null | cut -d= -f2)
-CLOUD_DOMAIN	:= $(shell grep '^CLOUDFLARE_DOMAIN=' srcs/.env 2>/dev/null | cut -d= -f2)
+COMPOSE		= docker-compose.yml
+COMPOSE_DEV	= docker-compose.dev.yml
+COMPOSE_CLOUD	= docker-compose.cloud.yml
+DOMAIN		:= $(shell grep '^DOMAIN=' .env 2>/dev/null | cut -d= -f2)
+CLOUD_DOMAIN	:= $(shell grep '^CLOUDFLARE_DOMAIN=' .env 2>/dev/null | cut -d= -f2)
 DEV_DOMAIN	:= localhost
 
 all: check-env hosts up
 
 check-env:
-	@if [ ! -f srcs/.env ]; then \
-		echo "ERROR: srcs/.env not found."; \
-		echo "Run: cp srcs/.env.example srcs/.env and fill in the values."; \
+	@if [ ! -f .env ]; then \
+		echo "ERROR: .env not found."; \
+		echo "Run: cp .env.example .env and fill in the values."; \
 		exit 1; \
 	fi
 

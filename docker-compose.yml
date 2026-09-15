@@ -3,7 +3,7 @@ services:
   nginx:
     container_name: nginx
     build:
-      context: ./requirements/nginx
+      context: ./nginx
       dockerfile: Dockerfile
     environment:
       DOMAIN: ${DOMAIN}
@@ -24,21 +24,15 @@ services:
 
   frontend:
     container_name: frontend
-    build: 
-      context: ./requirements/frontend
-      dockerfile: Dockerfile
-    expose: 
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      target: production
+    expose:
       - "5173"
-    volumes:
-      - frontend_node_modules:/app/node_modules
-      - ./requirements/backend:/backend
     networks:
       - transcendence
     restart: always
-    env_file:
-      - .env
-    environment:
-      - NODE_ENV=production
     logging:
       driver: json-file
       options:
@@ -48,8 +42,9 @@ services:
   backend:
     container_name: backend
     build:
-      context: ./requirements/backend
+      context: ./backend
       dockerfile: Dockerfile
+      target: production
     environment:
       - FORTYTWO_CALLBACK_URL=https://${DOMAIN}/api/auth/42/callback
       - FRONTEND_URL=https://${DOMAIN}
@@ -59,9 +54,6 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
-    volumes:
-      - ./requirements/backend:/app
-      - backend_node_modules:/app/node_modules
     networks:
       - transcendence
     restart: always
@@ -76,7 +68,7 @@ services:
   postgresql:
     container_name: postgresql
     build:
-      context: ./requirements/postgresql
+      context: ./postgresql
       dockerfile: Dockerfile
     expose:
       - "5432"
@@ -100,8 +92,6 @@ services:
 
 volumes:
   postgresql_data:
-  backend_node_modules:
-  frontend_node_modules:
 
 
 networks:
