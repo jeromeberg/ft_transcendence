@@ -83,7 +83,7 @@ The domain is set via `DOMAIN` in `.env`. Go to `https://$DOMAIN` and accept the
 Expose the app publicly via Cloudflare Tunnel.
 
 ```bash
-make invade-the-web # expose publicly via cloudflare
+make cloud # expose publicly via cloudflare
 ```
 
 The URL is set via `CLOUDFLARE_DOMAIN` in `.env`. Go to `https://$CLOUDFLARE_DOMAIN`.
@@ -91,24 +91,23 @@ The URL is set via `CLOUDFLARE_DOMAIN` in `.env`. Go to `https://$CLOUDFLARE_DOM
 
 ### Commands
 
-| **Command**            | **Description**                        |
-|------------------------|----------------------------------------|
-| make / make up         | Build and start in production mode     |
-| make dev               | Start in development mode              |
-| make invade-the-web    | Start in cloud mode                    |
-| make down              | Stop all containers                    |
-| make re                | Rebuild in production mode             |
-| make re-dev            | Rebuild in development mode            |
-| make re-invade-the-web | Rebuild in cloud mode                  |
-| make quotes            | Add default quotes                     |
-| make seed              | Seed the database with sample data     |
-| make stress            | Seed with a large data sample          |
-| make seedclean         | Remove seed data                       |
-| make clean             | Clean build artifacts                  |
-| make fclean            | Full clean                             |
-| make logs              | Show container logs                    |
-| make ps                | List container statuses                |
-| make hosts             | Add 127.0.0.1 $DOMAIN to /etc/hosts    |
+| **Command**      | **Description**                    |
+|------------------|------------------------------------|
+| `make up`        | Build and start in production mode |
+| `make dev`       | Start in development mode          |
+| `make cloud`     | Start in cloud mode                |
+| `make down`      | Stop all containers                |
+| `make re`        | Rebuild in production mode         |
+| `make redev`     | Rebuild in development mode        |
+| `make recloud`   | Rebuild in cloud mode              |
+| `make quotes`    | Add default quotes                 |
+| `make seed`      | Seed the database                  |
+| `make stress`    | Seed with a large data sample      |
+| `make seedclean` | Remove seed data                   |
+| `make clean`     | Clean build artifacts              |
+| `make fclean`    | Full clean volumes (dangerous)     |
+| `make logs`      | Show container logs                |
+| `make ps`        | List container statuses            |
 
 ## Modules
 

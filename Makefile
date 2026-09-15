@@ -6,7 +6,7 @@ DOMAIN		:= $(shell grep '^DOMAIN=' .env 2>/dev/null | cut -d= -f2)
 CLOUD_DOMAIN	:= $(shell grep '^CLOUDFLARE_DOMAIN=' .env 2>/dev/null | cut -d= -f2)
 DEV_DOMAIN	:= localhost
 
-all: check-env hosts up
+all: up
 
 check-env:
 	@if [ ! -f .env ]; then \
@@ -15,7 +15,7 @@ check-env:
 		exit 1; \
 	fi
 
-up: 
+up: check-env
 	docker compose -f $(COMPOSE) up --build -d
 	@printf "\n\033[1;32m  [OK] $(NAME) is up and running!\033[0m\n\n"
 	@printf "\033[1;36m  ┌───────────────────────────────────────────┐\033[0m\n"
@@ -33,7 +33,7 @@ dev: check-env
 	@printf "\033[1;36m  │\033[0m  Prisma.   ->  http://$(DEV_DOMAIN):5555  \033[1;36m│\033[0m\n"
 	@printf "\033[1;36m  └───────────────────────────────────────┘\033[0m\n\n"
 
-invade-the-web: check-env
+cloud: check-env
 	docker compose -f $(COMPOSE) -f $(COMPOSE_CLOUD) up --build -d
 	@printf "\n\033[1;35m  [CLOUD] $(NAME) is up via Cloudflare!\033[0m\n\n"
 	@printf "\033[1;36m  ┌────────────────────────────────────────────┐\033[0m\n"
@@ -43,12 +43,11 @@ invade-the-web: check-env
 down:
 	docker compose -f $(COMPOSE) -f $(COMPOSE_DEV) -f $(COMPOSE_CLOUD) down
 
-re: down hosts up
+re: down up
 
-# make re for dev
-re-dev: down dev
+redev: down dev
 
-re-invade-the-web: down invade-the-web
+recloud: down cloud
 
 clean: down
 	docker compose -f $(COMPOSE) -f $(COMPOSE_DEV) -f $(COMPOSE_CLOUD) down -v --rmi local
@@ -61,13 +60,6 @@ logs:
 
 ps:
 	docker compose -f $(COMPOSE) ps
-
-hosts:
-	@grep -q "$(DOMAIN)" /etc/hosts || echo "127.0.0.1 $(DOMAIN)" | sudo tee -a /etc/hosts > /dev/null
-	@echo "Hosts entry: 127.0.0.1 $(DOMAIN)"
-
-home:
-	@xdg-open https://$(DOMAIN) 2>/dev/null || open https://$(DOMAIN) 2>/dev/null || echo "Open: https://$(DOMAIN)"
 
 prisma:
 	@docker exec backend pkill -f "prisma studio" 2>/dev/null || true
@@ -85,4 +77,4 @@ seedclean:
 quotes:
 	docker compose -f $(COMPOSE) -f $(COMPOSE_DEV) exec backend npm run quotes
 
-.PHONY: all up dev invade-the-web down re re-dev re-invade-the-web clean fclean logs ps hosts home trust-cert seed seedclean stress quotes
+.PHONY: all up dev cloud down re redev recloud clean fclean logs ps seed seedclean stress quotes
